@@ -121,10 +121,10 @@ The remote attestation flow between the client and server are done over gRPC (yo
 * [TPM Remote Attestation protocol using go-tpm and gRPC](https://github.com/salrashid123/go_tpm_remote_attestation)
 
 ```bash
-$ go run client/client.go -host 127.0.0.1:50051  \
-  --tpm-path="127.0.0.1:2321" --stepCACertPath=$HOME/.step/certs/root_ca.crt \
-  --eventLogPath=swtpm/binary_bios_measurements  \
-  --v=10 -alsologtostderr
+$ go run attestation_server/attestaion_server.go  \
+        --ekrootCA swtpm/config/var/lib/swtpm-localca/issuercert.pem  \
+        --expectedPCRMapSHA256=0:a0b5ff3383a1116bd7dc6df177c0c2d433b9ee1813ea958fa5d166a202cb2a85 \
+        --v=40 -alsologtostderr
 
 I0903 07:06:34.461035 1329350 attestaion_server.go:1013] Starting gRPC server on port :50051
 I0903 07:06:53.807233 1329350 attestaion_server.go:172] ======= HealthCheck ========
@@ -401,10 +401,11 @@ I0903 07:06:53.894512 1329350 attestaion_server.go:942] =============== Attestat
 Start the Client
 
 ```bash
-$ go run attestation_server/attestaion_server.go  \
-        --ekrootCA swtpm/config/var/lib/swtpm-localca/issuercert.pem  \
-        --expectedPCRMapSHA256=0:a0b5ff3383a1116bd7dc6df177c0c2d433b9ee1813ea958fa5d166a202cb2a85 \
-        --v=40 -alsologtostderr
+$ go run client/client.go -host 127.0.0.1:50051  \
+  --tpm-path="127.0.0.1:2321" --stepCACertPath=$HOME/.step/certs/root_ca.crt \
+  --eventLogPath=swtpm/binary_bios_measurements  \
+  --v=10 -alsologtostderr
+
 
 I0903 07:06:53.799401 1329799 client.go:123] =============== HealthCheck ===============
 I0903 07:06:53.807652 1329799 client.go:139] RPC HealthChekStatus: SERVING
@@ -624,7 +625,7 @@ Certificate:
         Validity
             Not Before: Sep 3 11:05:53 2026 UTC
             Not After : Sep 4 11:06:53 2026 UTC
-        Subject: CN=78306e4e22081c08
+        Subject: CN=78306e4e22081c08    <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
         Subject Public Key Info:
             Public Key Algorithm: ECDSA
                 Public-Key: (256 bit)
@@ -641,14 +642,14 @@ Certificate:
             X509v3 Key Usage: critical
                 Digital Signature
             X509v3 Extended Key Usage:
-                Client Authentication
+                Client Authentication   <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
             X509v3 Subject Key Identifier:
                 9B:9C:04:FE:EF:5D:B2:B7:9B:18:A4:6A:6A:62:26:20:26:97:77:29
             X509v3 Authority Key Identifier:
                 04:E5:5E:AB:D3:45:18:D8:5A:B2:71:AD:9E:C1:71:C5:0D:E7:8A:5D
             X509v3 Subject Alternative Name:
-                Permanent Identifier: 78306e4e22081c08
-            X509v3 Step Provisioner:
+                Permanent Identifier: 78306e4e22081c08   <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+            X509v3 Step Provisioner:     <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
                 Type: ACME
                 Name: acme-da
     Signature Algorithm: ECDSA-SHA256

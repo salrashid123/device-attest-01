@@ -1096,7 +1096,8 @@ func (t TPM) Public() crypto.PublicKey {
 }
 
 func (t TPM) Sign(rr io.Reader, digest []byte, opts crypto.SignerOpts) ([]byte, error) {
-	return t.AK.SignMsg(t.TPM, digest, opts)
+	//return t.AK.SignMsg(t.TPM, digest, opts)
+	return nil, errors.New("AK cert is restricted:  cannot Sign() directly; use SignMessage()")
 }
 
 func (t TPM) SignMessage(rand io.Reader, msg []byte, opts crypto.SignerOpts) (signature []byte, err error) {
