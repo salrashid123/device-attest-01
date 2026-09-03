@@ -1,0 +1,49 @@
+Certificate:
+    Data:
+        Version: 3 (0x2)
+        Serial Number: 1 (0x1)
+        Signature Algorithm: ecdsa-with-SHA256
+        Issuer: C=US, O=Google, OU=Attestation Verifier, CN=Attestation Root CA
+        Validity
+            Not Before: Sep  2 16:14:40 2026 GMT
+            Not After : Sep  1 16:14:40 2036 GMT
+        Subject: C=US, O=Google, OU=Attestation Verifier, CN=Attestation Root CA
+        Subject Public Key Info:
+            Public Key Algorithm: id-ecPublicKey
+                Public-Key: (256 bit)
+                pub:
+                    04:e3:6a:f6:d6:a3:a5:3c:eb:d0:60:e3:2c:bd:1d:
+                    7c:e2:e9:2a:5b:af:d6:6f:63:f8:7d:64:37:4a:86:
+                    23:db:10:4e:5f:3f:70:4f:63:9b:26:80:ca:96:da:
+                    d1:4b:7b:b7:1a:66:5e:c4:16:58:85:bf:ae:5b:3a:
+                    51:c8:8e:97:e5
+                ASN1 OID: prime256v1
+                NIST CURVE: P-256
+        X509v3 extensions:
+            X509v3 Key Usage: critical
+                Certificate Sign, CRL Sign
+            X509v3 Basic Constraints: critical
+                CA:TRUE
+            X509v3 Subject Key Identifier: 
+                50:0D:28:2D:FD:4C:16:A8:F3:32:F4:21:15:9C:AC:DD:79:EF:E2:39
+            X509v3 Authority Key Identifier: 
+                50:0D:28:2D:FD:4C:16:A8:F3:32:F4:21:15:9C:AC:DD:79:EF:E2:39
+    Signature Algorithm: ecdsa-with-SHA256
+    Signature Value:
+        30:45:02:20:4a:da:2e:2b:b4:b5:cb:55:be:89:97:08:08:f6:
+        c7:75:c2:de:a3:f2:3a:82:0e:25:39:df:4a:96:71:dc:3f:bc:
+        02:21:00:bd:40:88:78:27:0a:44:43:a1:5d:11:98:c4:19:b0:
+        d3:f3:81:e7:27:31:7e:a5:ef:4b:cf:12:a5:a7:ab:2c:2b
+-----BEGIN CERTIFICATE-----
+MIICCDCCAa6gAwIBAgIBATAKBggqhkjOPQQDAjBbMQswCQYDVQQGEwJVUzEPMA0G
+A1UECgwGR29vZ2xlMR0wGwYDVQQLDBRBdHRlc3RhdGlvbiBWZXJpZmllcjEcMBoG
+A1UEAwwTQXR0ZXN0YXRpb24gUm9vdCBDQTAeFw0yNjA5MDIxNjE0NDBaFw0zNjA5
+MDExNjE0NDBaMFsxCzAJBgNVBAYTAlVTMQ8wDQYDVQQKDAZHb29nbGUxHTAbBgNV
+BAsMFEF0dGVzdGF0aW9uIFZlcmlmaWVyMRwwGgYDVQQDDBNBdHRlc3RhdGlvbiBS
+b290IENBMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE42r21qOlPOvQYOMsvR18
+4ukqW6/Wb2P4fWQ3SoYj2xBOXz9wT2ObJoDKltrRS3u3GmZexBZYhb+uWzpRyI6X
+5aNjMGEwDgYDVR0PAQH/BAQDAgEGMA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYE
+FFANKC39TBao8zL0IRWcrN157+I5MB8GA1UdIwQYMBaAFFANKC39TBao8zL0IRWc
+rN157+I5MAoGCCqGSM49BAMCA0gAMEUCIEraLiu0tctVvomXCAj2x3XC3qPyOoIO
+JTnfSpZx3D+8AiEAvUCIeCcKREOhXRGYxBmw0/OB5ycxfqXvS88SpaerLCs=
+-----END CERTIFICATE-----
