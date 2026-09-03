@@ -24,8 +24,9 @@ and also described here:
 
 In this specific setup, there are actually two distinct Certificate Authorities.
 
-a. Attestation CA on the Attestation server which verifies the client's TPM and issues an Attestation certificate to that device
-b. ACME server which runs its own CA to issue client certificates and is configured to accept device attestations signed by the Attestation CA.
+- `a.` Attestation CA on the Attestation server which verifies the client's TPM and issues an Attestation certificate to that device
+
+- `b.` ACME server which runs its own CA to issue client certificates and is configured to accept device attestations signed by the Attestation CA.
 
 For more general reading, see
 
