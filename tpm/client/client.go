@@ -757,31 +757,13 @@ func run() int {
 
 	glog.V(5).Infof("Acme Root Certificate: \n%s\n", acmeRootPrintable)
 
-	// *************************************************************************
-	// test the client cert by launching a HTTP server locally which expects the client cert we just got
-	//  then constuct an http client which loades the TPM based client cert and makes a connection to the server
-	// *************************************************************************
-	glog.V(5).Infoln("Using mTLS certificate to make mTLS call")
-
-	// this cert pool is for the client to trust the server's cert (i.,e the CA that signed the http server)
-	tlsTestCertPool := x509.NewCertPool()
-	tlscapem, err := os.ReadFile(*tlsTestServerCA)
-	if err != nil {
-		glog.Errorf("failed to load test server client cert trust CA error=%v", err)
-		return 1
-	}
-	if !tlsTestCertPool.AppendCertsFromPEM(tlscapem) {
-		glog.Errorf("error parsing tlsttestcertpool")
-		return 1
-	}
-
 	// issuedcert is the TPM  bound key's issued cert by acme
 	var issuedcert *x509.Certificate
 
 	// this certpools will list the CA's that server will expect the client cert'sissuer
 	// this will be populated by the intermdidate ACME CA
-
 	clientCertPool := x509.NewCertPool()
+
 	for _, b := range derChain {
 		pem.Encode(certOut, &pem.Block{Type: "CERTIFICATE", Bytes: b})
 		var err error
@@ -805,7 +787,24 @@ func run() int {
 		} else {
 			issuedcert = crt
 		}
+	}
 
+	// *************************************************************************
+	// test the client cert by launching a HTTP server locally which expects the client cert we just got
+	//  then constuct an http client which loades the TPM based client cert and makes a connection to the server
+	// *************************************************************************
+	glog.V(5).Infoln("Using mTLS certificate to make mTLS call")
+
+	// this cert pool is for the client to trust the server's cert (i.,e the CA that signed the http server)
+	tlsTestCertPool := x509.NewCertPool()
+	tlscapem, err := os.ReadFile(*tlsTestServerCA)
+	if err != nil {
+		glog.Errorf("failed to load test server client cert trust CA error=%v", err)
+		return 1
+	}
+	if !tlsTestCertPool.AppendCertsFromPEM(tlscapem) {
+		glog.Errorf("error parsing tlsttestcertpool")
+		return 1
 	}
 
 	// load the tls server's TLS certs
