@@ -12,7 +12,7 @@ As an overview, this repo consissts of several components
 2. Attesttation Server which perform TPM Remote Attestation and issues an Attestation Certificate
 3. ACME Server and CA which uses Attestions to issue an x509 certificate
 
-Visually, its something like this:
+Visually, its something like this. You can combine many of the remote attestation steps together but i've intentionally left them separate api calls:
 
 ![images/da_flow.png](images/da_flow.png)
 
@@ -102,13 +102,14 @@ $ step-ca
 For the TPM demo, startup a software tpm `swtpm`:
 
 ```bash
-rm -rf /tmp/myvtpm && mkdir /tmp/myvtpm && swtpm_setup --tpmstate /tmp/myvtpm --tpm2 --create-ek-cert && swtpm socket --tpmstate dir=/tmp/myvtpm --tpm2 --server type=tcp,port=2321 --ctrl type=tcp,port=2322 --flags not-need-init,startup-clear --log level=5
+cd tpm/swtpm/
+# rm -rf myvtpm && mkdir myvtpm && swtpm_setup --tpmstate myvtpm --tpm2 --create-ek-cert
+swtpm socket --tpmstate dir=myvtpm --tpm2 --server type=tcp,port=2321 --ctrl type=tcp,port=2322 --flags not-need-init,startup-clear --log level=5
 
 export TPM2TOOLS_TCTI="swtpm:port=2321"
 
-### then populate the PCR values so that the evenlog used maps PCRs for secureBoot verification
+### then populate the PCR values so that the evenlog replay during remote attestation matches these values
 ####  https://github.com/salrashid123/go_tpm_remote_attestation#setup-using-softwretpm
-cd swtpm/
 go run eventlog.go  --eventLogFile=binary_bios_measurements --tpm-path="127.0.0.1:2321"
 ```
 
@@ -448,28 +449,6 @@ I0903 07:06:53.876824 1329799 client.go:355] SetActivateCredential complete
 I0903 07:06:53.876890 1329799 client.go:357] =============== OfferQuote ===============
 I0903 07:06:53.877785 1329799 client.go:364] OfferQuote complete 
 I0903 07:06:53.877852 1329799 client.go:366] =============== SetQuote ===============
-I0903 07:06:53.895267 1329799 client.go:399] Issued AK Certificate: 
------BEGIN CERTIFICATE-----
-MIIDXjCCAwOgAwIBAgIFAMcgsrEwCgYIKoZIzj0EAwIwWzELMAkGA1UEBhMCVVMx
-DzANBgNVBAoMBkdvb2dsZTEdMBsGA1UECwwUQXR0ZXN0YXRpb24gVmVyaWZpZXIx
-HDAaBgNVBAMME0F0dGVzdGF0aW9uIFJvb3QgQ0EwHhcNMjYwOTAzMTEwNjUzWhcN
-MjcwOTAzMTEwNjUzWjAAMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA
-vWrjKuK4x68j+OndhvvRkTC8pyVHGmh5FPdUNAa6mseof9psB5/WMQsQwtGTs9na
-XflR5ghMI1TnBl/l+qDfJ4vhaT4NtkDS7xBV9vI8hG5oj5J+o24zTMrU9DbBHrY4
-q651Opd8iMRa9vYSl4ZD8pX7DlRPuqNdZhPNaALi2jquLc5JSIRT5spTtt7UYlom
-WvyT3VRCcrQKhI+O//U7ZM0nWHEqpLNw/YV2kzskW9olpPbqVl65DB0DLMtqYJLf
-ip1kLI7URv3cihzEFTN8ARwOwclOvU0TOwyR3CjsnIDItv35SfFBTVM7Arl5Ccuh
-rYya2t6ene4V2QCLkBhDTQIDAQABo4IBQjCCAT4wDgYDVR0PAQH/BAQDAgeAMBAG
-A1UdJQQJMAcGBWeBBQgDMAwGA1UdEwEB/wQCMAAwHwYDVR0jBBgwFoAUUA0oLf1M
-FqjzMvQhFZys3Xnv4jkwJwYDVR0gBCAwHjAIBgZngQULAQEwCAYGZ4EFCwECMAgG
-BmeBBQsBAzCBwQYDVR0RBIG5MIG2oEwGCCsGAQUFBwgEoEAwPgYFZ4EFAQKENTAw
-MDAxMDE0OjJmNmQ1MWRiNzczNmVjYjkyZGNkZTIyNzgwMzFjOGIxZWNjMzg3YjQ6
-NGQ1oCAGCCsGAQUFBwgDoBQwEgwQNzgzMDZlNGUyMjA4MWMwOKREMEIxFjAUBgVn
-gQUCARMLaWQ6MDAwMDEwMTQxEDAOBgVngQUCAhMFc3d0cG0xFjAUBgVngQUCAxML
-aWQ6MjAyNDAxMjUwCgYIKoZIzj0EAwIDSQAwRgIhAL/Ewu59xyNAGZbAc0FXP8Rb
-VdTYRKne8s8f7FONv568AiEAz8uI1GRAtmZW4ZWAQ4+yDBG83Jk1U5N7e6VyXufI
-BsA=
------END CERTIFICATE-----
 
 I0903 07:06:53.895897 1329799 client.go:412] Issued AK Certificate: 
 -----BEGIN CERTIFICATE-----
@@ -568,15 +547,9 @@ MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEdA6gq/dsMl5WFjSOz7fLqPscUaaj
 mYqeA7stphEoV7F3J6158OjQoCIpkjGHDMj/I5kkWa6st89p/ENd15Fg/Q==
 -----END PUBLIC KEY-----
 
-
-
 I0903 07:06:56.941416 1329799 client.go:640] started server accepting challenge
-
 I0903 07:06:56.960297 1329799 client.go:653] Waiting for order readiness validation...
-
 I0903 07:06:56.971294 1329799 client.go:707] Finalizing order with CSR...
-
-
 
 I0903 07:06:56.991955 1329799 client.go:778] Acme Root Certificate: 
 Certificate:

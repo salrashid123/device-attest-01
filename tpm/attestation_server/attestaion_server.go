@@ -553,6 +553,9 @@ func (s *server) SetActivateCredential(ctx context.Context, in *verifier.SetActi
 
 	attestationKeys[evt.EKM] = vv
 
+	//  You can accept the attestation key here.
+	//   however, what i do verify the PCR quotes and eventlog first before accepting the AK
+
 	glog.V(5).Infof("=============== end SetActivateCredential ===============")
 	return &verifier.SetActivateCredentialResponse{}, nil
 }
