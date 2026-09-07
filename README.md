@@ -111,6 +111,8 @@ export TPM2TOOLS_TCTI="swtpm:port=2321"
 
 ### then populate the PCR values so that the evenlog replay during remote attestation matches these values
 ####  https://github.com/salrashid123/go_tpm_remote_attestation#setup-using-softwretpm
+
+
 go run eventlog.go  --eventLogFile=binary_bios_measurements --tpm-path="127.0.0.1:2321"
 ```
 
@@ -796,6 +798,39 @@ Note that while i'd like to use `openssl s_client` in my tests instead of c clie
 
 
 also see: [mTLS with TPM bound private key](https://github.com/salrashid123/go_tpm_https_embed#appendix) and [OpenSSL 3 docker with TLS trace enabled (enable-ssl-trace) and FIPS](https://github.com/salrashid123/openssl_trace)
+
+### Test with python
+
+Python requests can use openssl as the backend and 'understands' the PEM format TPM key as well.
+
+So if you setup openssl correctly, it should 'just work'
+
+```python
+import requests
+
+response = requests.get('https://server.domain.com:18081/index.html', verify='../certs/tls-root-ca.crt', cert=('../certs/cert.pem', '../certs/tpmkey.pem'))
+
+print("Status Code: %s" % response.status_code)
+print(response.text)
+```
+
+in use, you have to startup the `openss s_server` from the previous section and use the certs provided by the ACME client
+
+```bash
+export OPENSSL_CONF=`pwd`/openssl.cnf
+export OPENSSL_MODULES=/usr/lib/x86_64-linux-gnu/ossl-modules/
+export TPM2TOOLS_TCTI="swtpm:port=2321"
+export TPM2OPENSSL_TCTI="swtpm:port=2321"
+export TPM2TOOLS_AUTOFLUSH=yes
+
+
+$ python3 main.py 
+Status Code: 200
+ok
+
+```
+
+Also see [Python mTLS client/server with TPM based key](https://gist.github.com/salrashid123/4cb714d800c9e8777dfbcd93ff076100)
 
 
 ## HTTP ACME
