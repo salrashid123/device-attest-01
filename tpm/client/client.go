@@ -29,9 +29,12 @@ import (
 	"fmt"
 	"os"
 
+	keyfile "github.com/foxboron/go-tpm-keyfiles"
 	"github.com/fxamacker/cbor/v2"
 	"github.com/golang/glog"
 	"github.com/google/go-attestation/attest"
+	"github.com/google/go-tpm/tpm2"
+	"github.com/google/go-tpm/tpm2/transport"
 	"github.com/google/go-tpm/tpmutil"
 	"github.com/gorilla/mux"
 	"github.com/salrashid123/go_tpm_registrar/verifier"
@@ -40,8 +43,6 @@ import (
 	"golang.org/x/net/http2"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
-	healthpb "google.golang.org/grpc/health/grpc_health_v1"
-	"google.golang.org/grpc/peer"
 )
 
 const (
@@ -58,7 +59,9 @@ var (
 	stepCACertPath    = flag.String("stepCACertPath", "/home/srashid/.step/certs/root_ca.crt", "tls Certificate")
 	eventLogPath      = flag.String("eventLogPath", "binary_bios_measurements", "Path to the eventlog")
 	issuedCertFile    = flag.String("issuedCertFile", "certs/cert.pem", "file to save the mtls cert")
-	tpmKeyFile        = flag.String("tpmKeyFile", "certs/tpmkey.json", "file to save the go-attestaton tpm formatted key")
+
+	tpmKeyFile    = flag.String("tpmKeyFile", "certs/tpmkey.json", "file to save the go-attestaton tpm formatted key")
+	tpmKeyFilePEM = flag.String("tpmKeyFilePEM", "certs/tpmkey.pem", "file to save the go-tpm formatted key")
 
 	tlsTestServerCA   = flag.String("tlsTestServerCA", "certs/tls-root-ca.crt", "tls Root Certificate")
 	testTLSServerCert = flag.String("testTLSServerCert", "certs/server.crt", "tls test server Certificate")
@@ -127,37 +130,10 @@ func run() int {
 	}
 	defer conn.Close()
 
-	glog.V(5).Infof("=============== HealthCheck ===============")
-
-	pr := new(peer.Peer)
-
-	hctx, cancel := context.WithTimeout(ctx, 1*time.Second)
-	defer cancel()
-	resp, err := healthpb.NewHealthClient(conn).Check(hctx, &healthpb.HealthCheckRequest{Service: verifier.Verifier_ServiceDesc.ServiceName}, grpc.Peer(pr))
-	if err != nil {
-		glog.Errorf("HealthCheck failed %+v", err)
-		return 1
-	}
-
-	if resp.GetStatus() != healthpb.HealthCheckResponse_SERVING {
-		glog.Errorf("service not in serving state: ", resp.GetStatus().String())
-		return 1
-	}
-	glog.V(5).Infof("RPC HealthChekStatus: %v\n", resp.GetStatus())
-
-	switch info := pr.AuthInfo.(type) {
-	case credentials.TLSInfo:
-		authType := info.AuthType()
-		sn := info.State.ServerName
-		glog.V(60).Infof("AuthType, ServerName %s, %s\n", authType, sn)
-	default:
-		glog.Errorf("Unknown AuthInfo type")
-		return 1
-	}
-
 	// first get the ek so we can stuff it into the platform cert
 
 	var config *attest.OpenConfig
+	var rwr transport.TPM
 	if !slices.Contains(TPMDEVICES, *tpmPath) {
 		glog.Info("Opening swtpm socket")
 		rwc, err := openTPM(*tpmPath)
@@ -169,7 +145,7 @@ func run() int {
 			rwc.Close()
 		}()
 
-		//rwr := transport.FromReadWriter(rwc)
+		rwr = transport.FromReadWriter(rwc)
 		config = &attest.OpenConfig{
 			CommandChannel: &linuxCmdChannel{rwc},
 		}
@@ -247,9 +223,8 @@ func run() int {
 	glog.V(5).Infof("Verified EK Cert\n")
 
 	glog.V(5).Infof("=============== OfferAK ===============")
+
 	// generate the attestation key
-	// TODO: see how to get the GCE signed attestation key:
-	// https://github.com/salrashid123/gcp-vtpm-ek-ak
 	akConfig := &attest.AKConfig{
 		Parent: &attest.ParentKeyConfig{
 			Algorithm: attest.RSA,
@@ -542,13 +517,31 @@ func run() int {
 		glog.V(5).Infof("Create a TPM based key\n")
 
 		// now create the TLS EC key on the TPM
+		// the parent w'ere using here is the ECC H2.  We're doing this to make a compatible TPM TSS Private PEM key later
+		// and to enable easy use with openssl's TPM provider https://www.hansenpartnership.com/draft-bottomley-tpm2-keys.html
+		primaryKey, err := tpm2.CreatePrimary{
+			PrimaryHandle: tpm2.TPMRHOwner,
+			InPublic:      tpm2.New2B(keyfile.ECCSRK_H2_Template),
+		}.Execute(rwr)
+		if err != nil {
+			glog.Errorf("error sending ekcert: %v", err)
+			return 1
+		}
+
+		defer func() {
+			flushContextCmd := tpm2.FlushContext{
+				FlushHandle: primaryKey.ObjectHandle,
+			}
+			_, _ = flushContextCmd.Execute(rwr)
+		}()
+
 		kConfig := &attest.KeyConfig{
 			Algorithm: attest.ECDSA,
 			Size:      256,
-			// Parent: &attest.ParentKeyConfig{
-			// 	Algorithm: attest.RSA,
-			// 	Handle:    0x81000001, // default RSA SRK
-			// },
+			Parent: &attest.ParentKeyConfig{
+				Algorithm: attest.ECDSA,
+				Handle:    tpmutil.Handle(primaryKey.ObjectHandle), //  or to use default RSA SRK 0x81000001,
+			},
 			QualifyingData: h.Sum(nil), // encode some client-side data into the attestatio that the server can verify
 		}
 		nk, err = tpmh.NewKey(ak, kConfig)
@@ -556,6 +549,17 @@ func run() int {
 			glog.V(5).Infof("ERROR:  error creating key  %v", err)
 			return 1
 		}
+
+		// flush the parent
+		flushContextCmd := tpm2.FlushContext{
+			FlushHandle: primaryKey.ObjectHandle,
+		}
+		_, err = flushContextCmd.Execute(rwr)
+		if err != nil {
+			glog.Errorf("ERROR:  error closing h2 parent  %v", err)
+			return 1
+		}
+
 		defer nk.Close()
 		err = ak.Close(tpmh)
 		if err != nil {
@@ -727,6 +731,52 @@ func run() int {
 		return 1
 	}
 	err = os.WriteFile(*tpmKeyFile, tpmkeybytes, 0644)
+	if err != nil {
+		glog.Errorf("Failed to write private key:  %v", err)
+		return 1
+	}
+
+	// construct a keyfile PEM format
+
+	pk, prk, err := nk.Blobs()
+	if err != nil {
+		glog.Errorf("Failed to get new key public/private blob:  %v", err)
+		return 1
+	}
+
+	pubArea, err := tpm2.Unmarshal[tpm2.TPMTPublic](pk)
+	if err != nil {
+		glog.Errorf("Failed to unmarshal TPMTPublic for new key:  %v", err)
+		return 1
+	}
+
+	var tpm2bPublic tpm2.TPM2BPublic = tpm2.New2B(*pubArea)
+
+	kf := &keyfile.TPMKey{
+		Keytype: keyfile.OIDLoadableKey,
+		Parent:  tpm2.TPMRHOwner,
+		Pubkey:  tpm2bPublic,
+		Privkey: tpm2.TPM2BPrivate{
+			Buffer: prk,
+		},
+		EmptyAuth: true,
+	}
+
+	tpmkeyfilebytes := new(bytes.Buffer)
+	err = keyfile.Encode(tpmkeyfilebytes, kf)
+	if err != nil {
+		glog.Errorf("failed to encode Key: %v", err)
+		return 1
+	}
+
+	// export TPM2TOOLS_TCTI="swtpm:port=2321"
+	// export TPM2OPENSSL_TCTI="swtpm:port=2321"
+	// echo -n "foo" > /tmp/file.txt
+	// openssl dgst  -provider tpm2 -provider default -sha256 -sign tpmkey.pem -out /tmp/signature.bin /tmp/file.txt
+	// openssl ec -provider tpm2 -provider default  -in tpmkey.pem -pubout -out /tmp/tpmpub.pem
+	// openssl dgst  -provider tpm2 -provider default -sha256 -verify /tmp/tpmpub.pem -signature /tmp/signature.bin /tmp/file.txt
+
+	err = os.WriteFile(*tpmKeyFilePEM, tpmkeyfilebytes.Bytes(), 0644)
 	if err != nil {
 		glog.Errorf("Failed to write private key:  %v", err)
 		return 1

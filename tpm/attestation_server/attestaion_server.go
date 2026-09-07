@@ -43,7 +43,6 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/credentials"
-	healthpb "google.golang.org/grpc/health/grpc_health_v1"
 	"google.golang.org/grpc/peer"
 	"google.golang.org/grpc/status"
 )
@@ -82,8 +81,6 @@ var (
 type server struct {
 	mu sync.Mutex // lock value to guard concurrent updates to attestationKeys[] map
 
-	// statusMap stores the serving status of the services this Server monitors.
-	statusMap map[string]healthpb.HealthCheckResponse_ServingStatus
 	// Embed the unimplemented server
 	verifier.UnimplementedVerifierServer
 }
@@ -130,18 +127,9 @@ func authUnaryInterceptor(
 	info *grpc.UnaryServerInfo,
 	handler grpc.UnaryHandler,
 ) (interface{}, error) {
-	var newCtx context.Context
 	var peerIPPort string
 	p, ok := peer.FromContext(ctx)
-	if ok {
-		var err error
-		peerIPPort, _, err = net.SplitHostPort(p.Addr.String())
-		if err != nil {
-			return nil, status.Errorf(codes.PermissionDenied, "could not get Remote IP")
-		}
-		glog.V(60).Infof("     Connected from peer %v", peerIPPort)
-		newCtx = context.WithValue(ctx, contextKey("peerIP"), peerIPPort)
-	} else {
+	if !ok {
 		glog.Errorf("ERROR:  Could not extract peerInfo from TLS")
 		return nil, status.Errorf(codes.PermissionDenied, "ERROR:  Could not extract peerInfo from TLS")
 	}
@@ -162,44 +150,8 @@ func authUnaryInterceptor(
 		PeerIP: peerIPPort,
 	}
 
-	newCtx = context.WithValue(newCtx, contextEventKey, *event)
+	newCtx := context.WithValue(ctx, contextEventKey, *event)
 	return handler(newCtx, req)
-}
-
-func (s *server) Check(ctx context.Context, in *healthpb.HealthCheckRequest) (*healthpb.HealthCheckResponse, error) {
-	s.mu.Lock()
-	defer s.mu.Unlock()
-	glog.V(2).Infof("======= HealthCheck ========")
-	if in.Service == "" {
-		// return overall status
-		return &healthpb.HealthCheckResponse{Status: healthpb.HealthCheckResponse_SERVICE_UNKNOWN}, nil
-	}
-
-	s.statusMap[verifier.Verifier_ServiceDesc.ServiceName] = healthpb.HealthCheckResponse_SERVING
-
-	evt := ctx.Value(contextKey("event")).(event)
-	glog.V(60).Infof("     Inbound gRPC request from: %s", evt.PeerIP)
-	glog.V(60).Infof("     Inbound EKM: %s", evt.EKM)
-	attestationKeys[evt.EKM] = db{}
-
-	status, ok := s.statusMap[in.Service]
-	if !ok {
-		return &healthpb.HealthCheckResponse{Status: healthpb.HealthCheckResponse_UNKNOWN}, grpc.Errorf(codes.NotFound, "unknown service")
-	}
-	return &healthpb.HealthCheckResponse{Status: status}, nil
-}
-
-func (s *server) Watch(in *healthpb.HealthCheckRequest, srv healthpb.Health_WatchServer) error {
-	return status.Error(codes.Unimplemented, "Watch is not implemented")
-}
-
-func (s *server) List(ctx context.Context, in *healthpb.HealthListRequest) (*healthpb.HealthListResponse, error) {
-	r := make(map[string]*healthpb.HealthCheckResponse)
-
-	r[verifier.Verifier_ServiceDesc.ServiceName] = &healthpb.HealthCheckResponse{
-		Status: healthpb.HealthCheckResponse_SERVING,
-	}
-	return &healthpb.HealthListResponse{Statuses: r}, nil
 }
 
 func (s *server) OfferEK(ctx context.Context, in *verifier.OfferEKRequest) (*verifier.OfferEKResponse, error) {
@@ -209,10 +161,12 @@ func (s *server) OfferEK(ctx context.Context, in *verifier.OfferEKRequest) (*ver
 	glog.V(60).Infof("     Inbound gRPC request from: %s", evt.PeerIP)
 	glog.V(60).Infof("     Inbound EKM: %s", evt.EKM)
 
-	if _, ok := attestationKeys[evt.EKM]; !ok {
-		glog.Errorf("Error cannot process OfferEK before calling HealthCheck [%s]", evt.EKM)
-		return &verifier.OfferEKResponse{}, status.Errorf(codes.Internal, "Error cannot process OfferPlatformCert before calling HealthCheck")
-	}
+	// if _, ok := attestationKeys[evt.EKM]; !ok {
+	// 	glog.Errorf("Error cannot process OfferEK before calling HealthCheck [%s]", evt.EKM)
+	// 	return &verifier.OfferEKResponse{}, status.Errorf(codes.Internal, "Error cannot process OfferPlatformCert before calling HealthCheck")
+	// }
+
+	attestationKeys[evt.EKM] = db{}
 
 	ekcert, err := x509.ParseCertificate(in.EkCert)
 	if err != nil {
@@ -973,9 +927,7 @@ func marshalOtherName(oid asn1.ObjectIdentifier, value interface{}) (asn1.RawVal
 
 // NewServer returns a new Server.
 func NewServer() *server {
-	return &server{
-		statusMap: make(map[string]healthpb.HealthCheckResponse_ServingStatus),
-	}
+	return &server{}
 }
 
 func main() {
@@ -1019,7 +971,6 @@ func run() int {
 	s := grpc.NewServer(sopts...)
 	srv := NewServer()
 	verifier.RegisterVerifierServer(s, srv)
-	healthpb.RegisterHealthServer(s, srv)
 
 	lis, err := net.Listen("tcp", *grpcPort)
 	if err != nil {

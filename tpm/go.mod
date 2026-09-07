@@ -13,6 +13,7 @@ require (
 )
 
 require (
+	github.com/foxboron/go-tpm-keyfiles v0.0.0-20260902202739-8c9c2d1005f4
 	github.com/fxamacker/cbor/v2 v2.9.3
 	github.com/google/go-attestation v0.6.0
 	github.com/google/go-tpm v0.9.9-0.20260124013517-8f8f42cba0de
