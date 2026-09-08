@@ -763,13 +763,6 @@ func run() int {
 		return 1
 	}
 
-	// export TPM2TOOLS_TCTI="swtpm:port=2321"
-	// export TPM2OPENSSL_TCTI="swtpm:port=2321"
-	// echo -n "foo" > /tmp/file.txt
-	// openssl dgst  -provider tpm2 -provider default -sha256 -sign tpmkey.pem -out /tmp/signature.bin /tmp/file.txt
-	// openssl ec -provider tpm2 -provider default  -in tpmkey.pem -pubout -out /tmp/tpmpub.pem
-	// openssl dgst  -provider tpm2 -provider default -sha256 -verify /tmp/tpmpub.pem -signature /tmp/signature.bin /tmp/file.txt
-
 	err = os.WriteFile(*tpmKeyFilePEM, tpmkeyfilebytes.Bytes(), 0644)
 	if err != nil {
 		glog.Errorf("Failed to write private key:  %v", err)

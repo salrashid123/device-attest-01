@@ -797,9 +797,19 @@ Note that while i'd like to use `openssl s_client` in my tests instead of c clie
 # 4057AE10D97F0000:error:0A00007B:SSL routines:tls_process_cert_verify:bad signature:../ssl/statem/statem_lib.c:591:
 ```
 
-
-
 also see: [mTLS with TPM bound private key](https://github.com/salrashid123/go_tpm_https_embed#appendix) and [OpenSSL 3 docker with TLS trace enabled (enable-ssl-trace) and FIPS](https://github.com/salrashid123/openssl_trace)
+
+Finally, you can use the tpm PEM key and openssl directly too:
+
+```bash
+export TPM2TOOLS_TCTI="swtpm:port=2321"
+export TPM2OPENSSL_TCTI="swtpm:port=2321"
+echo -n "foo" > /tmp/file.txt
+openssl dgst  -provider tpm2 -provider default -sha256 -sign tpmkey.pem -out /tmp/signature.bin /tmp/file.txt
+openssl ec -provider tpm2 -provider default  -in tpmkey.pem -pubout -out /tmp/tpmpub.pem
+openssl dgst  -provider tpm2 -provider default -sha256 -verify /tmp/tpmpub.pem -signature /tmp/signature.bin /tmp/file.txt
+```
+
 
 #### Python
 
