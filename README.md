@@ -32,8 +32,7 @@ For more general reading, see
 - [ACME device attestation, smallstep and pkcs11: attezt](https://linderud.dev/blog/acme-device-attestation-smallstep-and-pkcs11-attezt/)
 - [ACME Device Attestation: The Modern Zero Trust Alternative to SCEP](https://www.bastionxp.com/blog/acme-device-attestation-vs-scep-zero-trust/)
 
-In this sample, once the x609 is issued, the attestation server will launch a smaall HTTPS server which requires mTLS certificates issued by the ACME CA.  Once the client finishes the ACME protocol, it will connect to this HTTPS server over mTLS and just echo back the results.
-
+In this sample, once the x609 is issued, you can skip to the [Testing](#testing) to try out various mtls TPM clients
 
 >> NOTE: this repo is *not* supported by google
 
@@ -118,7 +117,7 @@ go run eventlog.go  --eventLogFile=binary_bios_measurements --tpm-path="127.0.0.
 
 Now start the server grpc Attestation Server
 
-#### Attestation Server
+### Attestation Server
 
 The remote attestation flow between the client and server are done over gRPC (you can use any other mechanism).  The specific flow and code is taken from:
 
@@ -131,12 +130,12 @@ $ go run attestation_server/attestaion_server.go  \
         --v=40 -alsologtostderr
 ```
 
-### Client
+### Device Client
 
-Start the Client
+Start the device Client
 
 ```bash
-$ go run client/client.go -host 127.0.0.1:50051  \
+$ go run device/client.go -host 127.0.0.1:50051  \
   --tpm-path="127.0.0.1:2321" --stepCACertPath=$HOME/.step/certs/root_ca.crt \
   --eventLogPath=swtpm/binary_bios_measurements  \
   --v=10 -alsologtostderr
@@ -407,15 +406,6 @@ Certificate:
          60:e6:da:83:ce:8d:22:c0:ef:87:1b:fd:be:40:b0:8a:2d:56:
          58:02:20:27:28:96:85:bb:6b:3c:f5:e1:db:b4:b7:81:1c:2e:
          19:ad:59:36:dd:4f:f7:92:85:ea:ce:11:fc:1f:08:af:15
-
-I0907 01:55:42.802644   12821 client.go:846] Using mTLS certificate to make mTLS call
-I0907 01:55:42.804264   12821 client.go:899] Starting Test TLS Server..
-I0907 01:55:45.814299   12821 client.go:932] client connected to server with cn CN=server.domain.com,OU=Enterprise,O=Google,C=US
-I0907 01:55:45.816303   12821 client.go:955] client connected with server Issuer: CN=TLS Root CA,OU=Enterprise,O=Google,C=US 
-I0907 01:55:45.816846   12821 client.go:885] Server connected with client certificate Issuer CN=mTLS ACME CA Intermediate CA,O=mTLS ACME CA
-I0907 01:55:45.816887   12821 client.go:886] Server connected with client certificate Subject CN=b1f8114685edc8c3
-I0907 01:55:45.817663   12821 client.go:975] client successfully verified server certificate.
-I0907 01:55:45.817813   12821 client.go:985] server Response: ok
 ```
 
 #### `Server Logs`
@@ -716,13 +706,45 @@ INFO[0126]                                               certificate="MIICEDCCAb
 ```
 
 
-### Test with Openssl
+### Testing
+
+#### Start HTTPS mTLS Server
+
+```bash
+cd tpm/testing/server
+
+$ go run server.go -stepCACertPath $HOME/.step/certs/intermediate_ca.crt -testTLSServerCert=../../certs/server.crt -testTLSServerKey=../../certs/server.key 
+
+Starting mTLS Server
+Starting Test TLS Server.. on port :18081
+
+Server connected with client certificate Issuer CN=mTLS ACME CA Intermediate CA,O=mTLS ACME CA  <<<<<<<<<<<<
+Server connected with client certificate Subject CN=dc14c7c890d58712                   <<<<<<<<<<<<<<<<<<
+```
+
+
+#### Go Client
+
+```bash
+cd tpm/testing/go_client/
+
+$ go run main.go -issuedCertFile=../../certs/cert.pem -tlsTestServerCA=../../certs/tls-root-ca.crt -tpmKeyFilePEM=../../certs/tpmkey.pem
+
+Using mTLS certificate to make mTLS call
+client connected to server with cn CN=server.domain.com,OU=Enterprise,O=Google,C=US
+client connected with server Issuer: CN=TLS Root CA,OU=Enterprise,O=Google,C=US 
+client successfully verified server certificate.server Response: ok
+```
+
+#### Openssl
 
 If you want to test the ouput TPM based client and server using openssl:
 
 first you'll need the [openssl tpm2 provider](https://github.com/tpm2-software/tpm2-openssl) installed:
 
 ```bash
+$ cd tpm/testing/openssl_client
+
 export TPM2TOOLS_TCTI="swtpm:port=2321"
 export TPM2OPENSSL_TCTI="swtpm:port=2321"
 export TPM2TSSENGINE_TCTI="swtpm:port=2321"
@@ -741,39 +763,19 @@ Providers:
     name: TPM 2.0 Provider
     version: 1.3.0
     status: active
-```
-- `Server`
-
-```bash
-$ cd tpm/openssl_client
-
-$ openssl s_server -cert ../certs/server.crt \
-       -key ../certs/server.key \
-       -port 18081 \
-       -CAfile $HOME/.step/certs/root_ca.crt \
-       -Verify 5 \
-       -tlsextdebug \
-       -tls1_3  \
-       -trace  \
-       -WWW
-```
-
-- `Client`
-
-```bash
-$ cd tpm/openssl_client
 
 $ gcc main.c -lcrypto -lssl -o client
 
-$ ./client
+$ ./client 
+Default Provider name: default
+Custom Provider name: tpm2
+Connected via TLS_AES_128_GCM_SHA256 encryption
+HTTP/1.0 200 OK
+Date: Tue, 08 Sep 2026 13:21:01 GMT
+Content-Length: 3
+Content-Type: text/plain; charset=utf-8
 
-    Default Provider name: default
-    Custom Provider name: tpm2
-    Connected via TLS_AES_256_GCM_SHA384 encryption
-    HTTP/1.0 200 ok
-    Content-type: text/html
-
-    ok
+ok
 ```
 
 The output you'll see on the server debug will demonstrate mTLS was used
@@ -799,7 +801,7 @@ Note that while i'd like to use `openssl s_client` in my tests instead of c clie
 
 also see: [mTLS with TPM bound private key](https://github.com/salrashid123/go_tpm_https_embed#appendix) and [OpenSSL 3 docker with TLS trace enabled (enable-ssl-trace) and FIPS](https://github.com/salrashid123/openssl_trace)
 
-### Test with python
+#### Python
 
 Python requests can use openssl as the backend and 'understands' the PEM format TPM key as well.
 
@@ -808,7 +810,7 @@ So if you setup openssl correctly, it should 'just work'
 ```python
 import requests
 
-response = requests.get('https://server.domain.com:18081/index.html', verify='../certs/tls-root-ca.crt', cert=('../certs/cert.pem', '../certs/tpmkey.pem'))
+response = requests.get('https://server.domain.com:18081/', verify='../../certs/tls-root-ca.crt', cert=('../../certs/cert.pem', '../../certs/tpmkey.pem'))
 
 print("Status Code: %s" % response.status_code)
 print(response.text)
@@ -817,12 +819,13 @@ print(response.text)
 in use, you have to startup the `openss s_server` from the previous section and use the certs provided by the ACME client
 
 ```bash
+$ cd tpm/testing/python_client
+
 export OPENSSL_CONF=`pwd`/openssl.cnf
 export OPENSSL_MODULES=/usr/lib/x86_64-linux-gnu/ossl-modules/
 export TPM2TOOLS_TCTI="swtpm:port=2321"
 export TPM2OPENSSL_TCTI="swtpm:port=2321"
 export TPM2TOOLS_AUTOFLUSH=yes
-
 
 $ python3 main.py 
 Status Code: 200
@@ -831,7 +834,6 @@ ok
 ```
 
 Also see [Python mTLS client/server with TPM based key](https://gist.github.com/salrashid123/4cb714d800c9e8777dfbcd93ff076100)
-
 
 ## HTTP ACME
 

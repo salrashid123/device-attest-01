@@ -163,7 +163,7 @@ int main(int argc, char **argv)
     SSL_CTX *ctx = create_context();
 
     // Pass paths to CA cert, Client cert, and Client private key
-    configure_context(ctx, "../certs/tls-root-ca.crt", "../certs/cert.pem", "../certs/tpmkey.pem");
+    configure_context(ctx, "../../certs/tls-root-ca.crt", "../../certs/cert.pem", "../../certs/tpmkey.pem");
 
     // Establish raw TCP connection
     int server_fd = create_socket(HOST, PORT);
@@ -181,7 +181,7 @@ int main(int argc, char **argv)
         // Format a basic HTTPS GET request
         char request[BUFFER_SIZE];
         snprintf(request, sizeof(request),
-                 "GET /index.html HTTP/1.0\r\n"
+                 "GET / HTTP/1.0\r\n"
                  "Host: %s\r\n"
                  "User-Agent: OpenSSL-C-Client\r\n"
                  "Connection: close\r\n\r\n", HOST);

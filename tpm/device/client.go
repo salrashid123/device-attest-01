@@ -36,11 +36,9 @@ import (
 	"github.com/google/go-tpm/tpm2"
 	"github.com/google/go-tpm/tpm2/transport"
 	"github.com/google/go-tpm/tpmutil"
-	"github.com/gorilla/mux"
 	"github.com/salrashid123/go_tpm_registrar/verifier"
 	"github.com/smallstep/certinfo"
 	"golang.org/x/crypto/acme"
-	"golang.org/x/net/http2"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
 )
@@ -62,10 +60,6 @@ var (
 
 	tpmKeyFile    = flag.String("tpmKeyFile", "certs/tpmkey.json", "file to save the go-attestaton tpm formatted key")
 	tpmKeyFilePEM = flag.String("tpmKeyFilePEM", "certs/tpmkey.pem", "file to save the go-tpm formatted key")
-
-	tlsTestServerCA   = flag.String("tlsTestServerCA", "certs/tls-root-ca.crt", "tls Root Certificate")
-	testTLSServerCert = flag.String("testTLSServerCert", "certs/server.crt", "tls test server Certificate")
-	testTLSServerKey  = flag.String("testTLSServerKey", "certs/server.key", "tls test server key")
 
 	oidExtensionSubjectAltName = asn1.ObjectIdentifier{2, 5, 29, 17}
 	// https://trustedcomputinggroup.org/wp-content/uploads/TCG-OID-Registry-Version-1.00_pub-1.pdf
@@ -807,12 +801,8 @@ func run() int {
 
 	glog.V(5).Infof("Acme Root Certificate: \n%s\n", acmeRootPrintable)
 
-	// issuedcert is the TPM  bound key's issued cert by acme
-	var issuedcert *x509.Certificate
-
 	// this certpools will list the CA's that server will expect the client cert'sissuer
 	// this will be populated by the intermdidate ACME CA
-	clientCertPool := x509.NewCertPool()
 
 	for _, b := range derChain {
 		pem.Encode(certOut, &pem.Block{Type: "CERTIFICATE", Bytes: b})
@@ -829,160 +819,9 @@ func run() int {
 			return 1
 		}
 
-		glog.V(5).Infof("Certificate: \n%s\n", issuedcertPrintable)
+		glog.V(5).Infof("Issued Certificate: \n%s\n", issuedcertPrintable)
 
-		// there could be many in this chain but for this test, its just the intermediate and leaf...
-		if crt.IsCA {
-			clientCertPool.AddCert(crt)
-		} else {
-			issuedcert = crt
-		}
 	}
-
-	// *************************************************************************
-	// test the client cert by launching a HTTP server locally which expects the client cert we just got
-	//  then constuct an http client which loades the TPM based client cert and makes a connection to the server
-	// *************************************************************************
-	glog.V(5).Infoln("Using mTLS certificate to make mTLS call")
-
-	// this cert pool is for the client to trust the server's cert (i.,e the CA that signed the http server)
-	tlsTestCertPool := x509.NewCertPool()
-	tlscapem, err := os.ReadFile(*tlsTestServerCA)
-	if err != nil {
-		glog.Errorf("failed to load test server client cert trust CA error=%v", err)
-		return 1
-	}
-	if !tlsTestCertPool.AppendCertsFromPEM(tlscapem) {
-		glog.Errorf("error parsing tlsttestcertpool")
-		return 1
-	}
-
-	// load the tls server's TLS certs
-	defaultServerCerts, err := tls.LoadX509KeyPair(*testTLSServerCert, *testTLSServerKey)
-	if err != nil {
-		glog.Errorf("failed to load test server certificates  error=%v", err)
-		return 1
-	}
-	go func() error {
-
-		router := mux.NewRouter()
-		router.Methods(http.MethodGet).Path("/").HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			fmt.Fprintln(w, "ok")
-		})
-		tlsConfig := &tls.Config{
-			Certificates: []tls.Certificate{defaultServerCerts}, // the servers listener tls cert
-			MinVersion:   tls.VersionTLS13,
-			ClientAuth:   tls.RequireAndVerifyClientCert,
-			ClientCAs:    clientCertPool, // the CA that the client cert must be signed by
-			VerifyPeerCertificate: func(rawCerts [][]byte, verifiedChains [][]*x509.Certificate) error {
-
-				// lists out the remote peers (i.e the client certs sent over to the server)
-				for _, rawCert := range rawCerts {
-					c, err := x509.ParseCertificate(rawCert)
-					if err != nil {
-						return err
-					}
-					glog.V(5).Infof("Server connected with client certificate Issuer %s\n", c.Issuer)
-					glog.V(5).Infof("Server connected with client certificate Subject %s\n", c.Subject)
-				}
-				return nil
-			},
-		}
-
-		var server *http.Server
-		server = &http.Server{
-			Addr:      ":18081",
-			Handler:   router,
-			TLSConfig: tlsConfig, // start the server
-		}
-		http2.ConfigureServer(server, &http2.Server{})
-		glog.V(5).Infof("Starting Test TLS Server..")
-		return server.ListenAndServeTLS("", "")
-
-	}()
-	time.Sleep(3 * time.Second)
-
-	// load a crypto.Signer() representation for the TPM based key
-	clientsigner, err := nk.Private(nk.Public())
-	if err != nil {
-		glog.Errorf("Failed to prettyprint certificate:  %v", err)
-		return 1
-	}
-
-	// configure mtls to use the ACME issued leaf cert and the TPM based signer for our key
-	clientTLS := tls.Certificate{
-		Certificate: [][]byte{issuedcert.Raw},
-		PrivateKey:  clientsigner,
-	}
-
-	// set up the client cert tls config
-	tlsConfig := &tls.Config{
-		Certificates: []tls.Certificate{clientTLS}, // set the tlsCertificate struct for our client cert
-		RootCAs:      tlsTestCertPool,
-		MinVersion:   tls.VersionTLS13,
-
-		VerifyPeerCertificate: func(rawCerts [][]byte, verifiedChains [][]*x509.Certificate) error {
-
-			// print out some specifics of the server though its not important and not a client cert..
-			for _, rawCert := range rawCerts {
-				c, err := x509.ParseCertificate(rawCert)
-				if err != nil {
-					return err
-				}
-				glog.V(5).Infof("client connected to server with cn %s\n", c.Subject)
-			}
-			return nil
-		},
-	}
-
-	tr := &http.Transport{
-		TLSClientConfig: tlsConfig,
-		DialTLS: func(network, addr string) (net.Conn, error) {
-
-			// extract the connection the client made to the server
-
-			tlsConn, err := tls.Dial(network, addr, tlsConfig)
-			if err != nil {
-				return tlsConn, err
-			}
-			err = tlsConn.Handshake()
-			if err != nil {
-				return tlsConn, err
-			}
-			state := tlsConn.ConnectionState()
-			certs := state.PeerCertificates
-			for _, cert := range certs {
-				glog.V(5).Infof("client connected with server Issuer: %s \n", cert.Issuer)
-			}
-			return tlsConn, nil
-		},
-	}
-
-	hclient := &http.Client{
-		Transport: tr,
-		Timeout:   30 * time.Second,
-	}
-
-	hresp, err := hclient.Get("https://server.domain.com:18081/")
-	if err != nil {
-		glog.Errorf("Failed connecting to test tls server:  %v", err)
-		return 1
-	}
-	defer hresp.Body.Close()
-
-	if hresp.TLS != nil {
-		if len(hresp.TLS.PeerCertificates) > 0 {
-			glog.V(5).Infof("client successfully verified server certificate.")
-		}
-	}
-
-	body, err := io.ReadAll(hresp.Body)
-	if err != nil {
-		glog.Errorf("Failed reading the server response  %v", err)
-		return 1
-	}
-
-	glog.V(5).Infof("server Response: %s\n", body)
 
 	return 0
 }
