@@ -812,7 +812,12 @@ func run() int {
 			return 1
 		}
 
-		glog.V(5).Infof("Issued Certificate: \n%s\n", issuedcertPrintable)
+		if crt.IsCA {
+			glog.V(5).Infof("Intermediate Certificate: \n%s\n", issuedcertPrintable)
+
+		} else {
+			glog.V(5).Infof("Issued Certificate: \n%s\n", issuedcertPrintable)
+		}
 
 	}
 
