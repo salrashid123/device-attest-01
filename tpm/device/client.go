@@ -7,7 +7,6 @@ import (
 	"crypto/ecdsa"
 	"crypto/elliptic"
 	"crypto/rand"
-	"crypto/rsa"
 	"crypto/sha256"
 	"crypto/tls"
 	"crypto/x509"
@@ -18,7 +17,6 @@ import (
 	"encoding/pem"
 	"errors"
 	"io"
-	"math/big"
 	"net"
 	"net/http"
 	"path/filepath"
@@ -506,6 +504,7 @@ func run() int {
 
 		h := sha256.New()
 		h.Write([]byte(keyauthString))
+		keyauthHash := h.Sum(nil)
 		glog.V(5).Infof("KEYAUTH: %s\n", keyauthString)
 
 		glog.V(5).Infof("Create a TPM based key\n")
@@ -536,7 +535,7 @@ func run() int {
 				Algorithm: attest.ECDSA,
 				Handle:    tpmutil.Handle(primaryKey.ObjectHandle), //  or to use default RSA SRK 0x81000001,
 			},
-			QualifyingData: h.Sum(nil), // encode some client-side data into the attestatio that the server can verify
+			QualifyingData: keyauthHash, // encode some client-side data into the attestatio that the server can verify
 		}
 		nk, err = tpmh.NewKey(ak, kConfig)
 		if err != nil {
@@ -909,65 +908,11 @@ type hardwareModuleName struct {
 
 // keyAuth generates a key authorization string for a given token.
 func keyAuth(pub crypto.PublicKey, token string) (string, error) {
-	th, err := JWKThumbprint(pub)
+	th, err := acme.JWKThumbprint(pub)
 	if err != nil {
 		return "", err
 	}
 	return fmt.Sprintf("%s.%s", token, th), nil
-}
-
-// THe following functions are from smallstep-ca codebase:
-
-// JWKThumbprint creates a JWK thumbprint out of pub
-// as specified in https://tools.ietf.org/html/rfc7638.
-func JWKThumbprint(pub crypto.PublicKey) (string, error) {
-	jwk, err := jwkEncode(pub)
-	if err != nil {
-		return "", err
-	}
-	b := sha256.Sum256([]byte(jwk))
-	return base64.RawURLEncoding.EncodeToString(b[:]), nil
-}
-
-// jwkEncode encodes public part of an RSA or ECDSA key into a JWK.
-// The result is also suitable for creating a JWK thumbprint.
-// https://tools.ietf.org/html/rfc7517
-func jwkEncode(pub crypto.PublicKey) (string, error) {
-	switch pub := pub.(type) {
-	case *rsa.PublicKey:
-		// https://tools.ietf.org/html/rfc7518#section-6.3.1
-		n := pub.N
-		e := big.NewInt(int64(pub.E))
-		// Field order is important.
-		// See https://tools.ietf.org/html/rfc7638#section-3.3 for details.
-		return fmt.Sprintf(`{"e":"%s","kty":"RSA","n":"%s"}`,
-			base64.RawURLEncoding.EncodeToString(e.Bytes()),
-			base64.RawURLEncoding.EncodeToString(n.Bytes()),
-		), nil
-	case *ecdsa.PublicKey:
-		// https://tools.ietf.org/html/rfc7518#section-6.2.1
-		p := pub.Curve.Params()
-		n := p.BitSize / 8
-		if p.BitSize%8 != 0 {
-			n++
-		}
-		x := pub.X.Bytes()
-		if n > len(x) {
-			x = append(make([]byte, n-len(x)), x...)
-		}
-		y := pub.Y.Bytes()
-		if n > len(y) {
-			y = append(make([]byte, n-len(y)), y...)
-		}
-		// Field order is important.
-		// See https://tools.ietf.org/html/rfc7638#section-3.3 for details.
-		return fmt.Sprintf(`{"crv":"%s","kty":"EC","x":"%s","y":"%s"}`,
-			p.Name,
-			base64.RawURLEncoding.EncodeToString(x),
-			base64.RawURLEncoding.EncodeToString(y),
-		), nil
-	}
-	return "", errors.New("acme: unknown key type; only RSA and ECDSA are supported")
 }
 
 // this bit i got from gemini...

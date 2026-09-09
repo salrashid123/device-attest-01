@@ -137,7 +137,7 @@ Start the device Client
 ```bash
 $ go run device/client.go -host 127.0.0.1:50051  \
   --tpm-path="127.0.0.1:2321" --stepCACertPath=$HOME/.step/certs/root_ca.crt \
-  --eventLogPath=swtpm/binary_bios_measurements  \
+  --eventLogPath=swtpm/binary_bios_measurements -tpmKeyFilePEM=certs/tpmkey.pem -tpmKeyFile=certs/tpmkey.json   \
   --v=10 -alsologtostderr
 ```
 
