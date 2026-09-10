@@ -725,8 +725,15 @@ Server connected with client certificate Subject CN=dc14c7c890d58712            
 
 #### Go Client
 
+There are two varients in golang which implement a required `crypto.Signer` interface needed for the TLS Connection from the client.  You can use either though the keyfile is generally easier for keys wihout complex policies.  For keys with [complex TPM policies](https://github.com/salrashid123/tpmsigner#keys-with-auth-policy), you could use [https://pkg.go.dev/github.com/salrashid123/tpmsigner](github.com/salrashid123/tpmsigner)
+
+
 ```bash
+## using crypto.Signer from github.com/foxboron/go-tpm-keyfiles
 cd tpm/testing/go_client/
+
+## using crypto.Signer from github.com/salrashid123/tpmsigner
+# cd tpm/testing/go_client_tpmsigner
 
 $ go run main.go -issuedCertFile=../../certs/cert.pem -tlsTestServerCA=../../certs/tls-root-ca.crt -tpmKeyFilePEM=../../certs/tpmkey.pem
 
@@ -734,6 +741,8 @@ Using mTLS certificate to make mTLS call
 client connected to server with cn CN=server.domain.com,OU=Enterprise,O=Google,C=US
 client connected with server Issuer: CN=TLS Root CA,OU=Enterprise,O=Google,C=US 
 client successfully verified server certificate.server Response: ok
+
+
 ```
 
 #### Openssl
