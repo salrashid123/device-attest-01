@@ -16,11 +16,6 @@ Visually, its something like this. You can combine many of the remote attestatio
 
 ![images/da_flow.png](images/da_flow.png)
 
-This entiere flow is also described here:
-
-- [Managed Device Attestation: ACME as the Bottom Turtle in Mobile Device Management](https://smallstep.com/blog/managed-device-attestation/)
-- [ACME Device Attestation: The Modern Zero Trust Alternative to SCEP](https://www.bastionxp.com/blog/acme-device-attestation-vs-scep-zero-trust/)
-
 In this specific setup, there are actually two distinct Certificate Authorities.
 
 - `a.` Attestation CA on the Attestation server which verifies the client's TPM and issues an Attestation certificate to that device
@@ -29,14 +24,35 @@ In this specific setup, there are actually two distinct Certificate Authorities.
 
 For more general reading, see
 
-- [ACME device attestation, smallstep and pkcs11: attezt](https://linderud.dev/blog/acme-device-attestation-smallstep-and-pkcs11-attezt/)
+- [Managed Device Attestation: ACME as the Bottom Turtle in Mobile Device Management](https://smallstep.com/blog/managed-device-attestation/)
 - [ACME Device Attestation: The Modern Zero Trust Alternative to SCEP](https://www.bastionxp.com/blog/acme-device-attestation-vs-scep-zero-trust/)
+- [ACME device attestation, smallstep and pkcs11: attezt](https://linderud.dev/blog/acme-device-attestation-smallstep-and-pkcs11-attezt/)
 
 In this sample, once the x609 is issued, you can skip to the [Testing](#testing) to try out various mtls TPM clients
 
 >> NOTE: this repo is *not* supported by google
 
-### Step-CA Setup
+---
+
+* [Step-CA Setup](#step-ca-setup)
+* [TPM ACME](#tpm-acme)
+  - [Attestation Server](#attestation-server)
+  - [Device Client](#device-client)
+  - [Logs](#logs)
+    - [Client Logs](#client-logs)
+    - [Server Logs](#server-logs)
+    - [Acme Server](#acme-server)
+  - [Testing](#testing)
+    - [Start HTTPS mTLS Server](#start-https-mtls-server)
+    - [go client](#go-client)
+    - [openssl client](#openssl-client)
+    - [python client](#python-client)     
+    - [Session Encryption](#session-encryption)
+* [HTTP ACME](#http-acme)    
+
+---
+
+## Step-CA Setup
 
 To get started, you'll need golang and `smallstep-ca`, `smallstep-cli`
 
@@ -145,9 +161,11 @@ Note the client will write the issued x509 certificate to `certs/cert.pem` and w
 
 ---
 
+### Logs
+
 Once you run the client and server, you'll see the sample output on the client
 
-#### `Client Logs`
+#### Client Logs
 
 ```log
 $ go run client/client.go -host 127.0.0.1:50051 \
@@ -408,7 +426,7 @@ Certificate:
          19:ad:59:36:dd:4f:f7:92:85:ea:ce:11:fc:1f:08:af:15
 ```
 
-#### `Server Logs`
+#### Server Logs
 
 The server output will just show it doing TPM remote attestation and issuing a cert
 
@@ -688,7 +706,7 @@ I0907 01:55:39.707348   12740 attestaion_server.go:899] =============== Attestat
 
 The step-ca logs also chronicles the provisioning flows
 
-### ACME Server
+#### ACME Server
 
 ```bash
 $ step-ca
@@ -702,9 +720,7 @@ INFO[0126]                                               duration=8.856602ms dur
 INFO[0126]                                               duration=7.251235ms duration-ns=7251235 fields.time="2026-09-07T01:55:42-04:00" method=POST name=ca nonce=Y2FndVB5ak9wWkNucGVnOXNKMFBjaGhjN1IzaWRaZWY path=/acme/acme-da/order/M2baOJzsNRsNj4ljPyNxbAPBAaDJ4sDb protocol=HTTP/1.1 referer= remote-address=127.0.0.1 request-id=c3edbfa0-298d-452e-913f-4bb1ea441935 response="{\"id\":\"M2baOJzsNRsNj4ljPyNxbAPBAaDJ4sDb\",\"status\":\"ready\",\"expires\":\"2026-09-08T05:55:39Z\",\"identifiers\":[{\"type\":\"permanent-identifier\",\"value\":\"b1f8114685edc8c3\"}],\"notBefore\":\"2026-09-07T05:54:39Z\",\"notAfter\":\"2026-09-08T05:55:39Z\",\"authorizations\":[\"https://ca.domain.com:8443/acme/acme-da/authz/0ucfXQVnSmIlCdS9C0mirdUoWGpUCwPw\"],\"finalize\":\"https://ca.domain.com:8443/acme/acme-da/order/M2baOJzsNRsNj4ljPyNxbAPBAaDJ4sDb/finalize\"}" size=437 status=200 user-agent=golang.org/x/crypto/acme@v0.50.0 user-id=
 INFO[0126]                                               duration=13.541417ms duration-ns=13541417 fields.time="2026-09-07T01:55:42-04:00" method=POST name=ca nonce=S0tZelp1U00xS3JPc2JJdXNpblRpMW1DbnBpVUM0ZUQ path=/acme/acme-da/order/M2baOJzsNRsNj4ljPyNxbAPBAaDJ4sDb/finalize protocol=HTTP/1.1 referer= remote-address=127.0.0.1 request-id=c9df42ad-04b1-4984-880b-523cfea7a659 response="{\"id\":\"M2baOJzsNRsNj4ljPyNxbAPBAaDJ4sDb\",\"status\":\"valid\",\"expires\":\"2026-09-08T05:55:39Z\",\"identifiers\":[{\"type\":\"permanent-identifier\",\"value\":\"b1f8114685edc8c3\"}],\"notBefore\":\"2026-09-07T05:54:39Z\",\"notAfter\":\"2026-09-08T05:55:39Z\",\"authorizations\":[\"https://ca.domain.com:8443/acme/acme-da/authz/0ucfXQVnSmIlCdS9C0mirdUoWGpUCwPw\"],\"finalize\":\"https://ca.domain.com:8443/acme/acme-da/order/M2baOJzsNRsNj4ljPyNxbAPBAaDJ4sDb/finalize\",\"certificate\":\"https://ca.domain.com:8443/acme/acme-da/certificate/h9YCkdRz1iCZ13FkbClrEBCDhRakl7eO\"}" size=538 status=200 user-agent=golang.org/x/crypto/acme@v0.50.0 user-id=
 INFO[0126]                                               certificate="MIICEDCCAbWgAwIBAgIQOT1/a9fwW2P5pKmAP3lpITAKBggqhkjOPQQDAjA+MRUwEwYDVQQKEwxtVExTIEFDTUUgQ0ExJTAjBgNVBAMTHG1UTFMgQUNNRSBDQSBJbnRlcm1lZGlhdGUgQ0EwHhcNMjYwOTA3MDU1NDM5WhcNMjYwOTA4MDU1NTM5WjAbMRkwFwYDVQQDExBiMWY4MTE0Njg1ZWRjOGMzMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEcSUYEK7hPX5DlANvoFuvOrr/az1SCvSWw9OOo7CtGiMajMxPWJjZ6X51xoBdPfiUb92UcwikiZx3mbxdx0ksj6OBtzCBtDAOBgNVHQ8BAf8EBAMCB4AwEwYDVR0lBAwwCgYIKwYBBQUHAwIwHQYDVR0OBBYEFEbZAWXUajF04CLV2d3xy4gGn1dKMB8GA1UdIwQYMBaAFCG3Dt8Wxnsw4FIF6c6QHyIafUdpMCsGA1UdEQQkMCKgIAYIKwYBBQUHCAOgFDASDBBiMWY4MTE0Njg1ZWRjOGMzMCAGDCsGAQQBgqRkxihAAQQQMA4CAQYEB2FjbWUtZGEEADAKBggqhkjOPQQDAgNJADBGAiEAjCyYwof+mPJEMECc6J7BIkj7WSkob9OD46KncxOPaV0CIQDj/beqWvW9JjU0mOh9NODHOO4tM5hkCShozHc0SAD1FA==" duration=3.770787ms duration-ns=3770787 fields.time="2026-09-07T01:55:42-04:00" issuer="mTLS ACME CA Intermediate CA" method=POST name=ca nonce=REptNTlCTTd6QWJtV3pwaVVSWXEyRzJKekx3VTEzM3U path=/acme/acme-da/certificate/h9YCkdRz1iCZ13FkbClrEBCDhRakl7eO protocol=HTTP/1.1 provisioner=acme-da public-key="ECDSA P-256" referer= remote-address=127.0.0.1 request-id=e592149d-45ad-43ee-9f81-6a27fcb94678 sans="map[]" serial=76085310278373732917148320914805975329 size=1478 status=200 subject=b1f8114685edc8c3 user-agent=golang.org/x/crypto/acme@v0.50.0 user-id= valid-from="2026-09-07T05:54:39Z" valid-to="2026-09-08T05:55:39Z"
-
 ```
-
 
 ### Testing
 
@@ -741,11 +757,9 @@ Using mTLS certificate to make mTLS call
 client connected to server with cn CN=server.domain.com,OU=Enterprise,O=Google,C=US
 client connected with server Issuer: CN=TLS Root CA,OU=Enterprise,O=Google,C=US 
 client successfully verified server certificate.server Response: ok
-
-
 ```
 
-#### Openssl
+#### Openssl Client
 
 If you want to test the ouput TPM based client and server using openssl:
 
@@ -820,7 +834,7 @@ openssl dgst  -provider tpm2 -provider default -sha256 -verify /tmp/tpmpub.pem -
 ```
 
 
-#### Python
+#### Python Client
 
 Python requests can use openssl as the backend and 'understands' the PEM format TPM key as well.
 
