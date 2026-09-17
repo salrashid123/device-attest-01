@@ -7,16 +7,19 @@ import (
 	"crypto/ecdsa"
 	"crypto/elliptic"
 	"crypto/rand"
+	"crypto/rsa"
 	"crypto/sha256"
 	"crypto/tls"
 	"crypto/x509"
 	"crypto/x509/pkix"
 	"encoding/asn1"
 	"encoding/base64"
+	"encoding/hex"
 	"encoding/json"
 	"encoding/pem"
 	"errors"
 	"io"
+	"math/big"
 	"net"
 	"net/http"
 	"path/filepath"
@@ -222,6 +225,7 @@ func run() int {
 			Algorithm: attest.RSA,
 			Handle:    0x81000001, // SRK, pg 29 https://trustedcomputinggroup.org/wp-content/uploads/TCG-TPM-v2.0-Provisioning-Guidance-Published-v1r1.pdf
 		},
+		Algorithm: attest.RSA,
 	}
 	//akConfig := &attest.AKConfig{}
 	ak, err := tpmh.NewAK(akConfig)
@@ -506,7 +510,7 @@ func run() int {
 		h.Write([]byte(keyauthString))
 		keyauthHash := h.Sum(nil)
 		glog.V(5).Infof("KEYAUTH: %s\n", keyauthString)
-
+		glog.V(5).Infof("sha356sum(KEYAUTH): %s\n", base64.StdEncoding.EncodeToString(keyauthHash))
 		glog.V(5).Infof("Create a TPM based key\n")
 
 		// now create the TLS EC key on the TPM
@@ -559,6 +563,19 @@ func run() int {
 			glog.Errorf("ERROR:  error closing ak  %v", err)
 			return 1
 		}
+		nkCertificationPublicBytes := nk.CertificationParameters().Public
+		nkPublic, err := tpm2.Unmarshal[tpm2.TPMTPublic](nkCertificationPublicBytes)
+		if err != nil {
+			glog.Errorf("error parsing newKey TPMTPublic: %v", err)
+			os.Exit(1)
+		}
+
+		nkName, err := tpm2.ObjectName(nkPublic)
+		if err != nil {
+			glog.Errorf("error parsing newKey Name: %v", err)
+			os.Exit(1)
+		}
+		glog.V(5).Infof("NewKey Name %s\n", hex.EncodeToString(nkName.Buffer))
 
 		var ok bool
 		newPublicKey, ok = nk.Public().(*ecdsa.PublicKey)
@@ -618,6 +635,145 @@ func run() int {
 			},
 			//AuthData: rawAuthData,
 		}
+
+		// ####################### START: regenerate the TPMTPublic from the bytes w'ere gonna send to the acme server
+		// the only reason i'm doing this here is to demonstrate that infact, the ACME server can unilaterally derive and verify
+		// the key specifications (attributes, the TPM "name") and even the public key its going to trust and issue the x509 for
+		// the following steps are not done on the device; its done on the server.  Its just for demonstration here so you understand whats being done
+
+		decodedAttestation, err := tpm2.Unmarshal[tpm2.TPMSAttest](nk.CertificationParameters().CreateAttestation)
+		if err != nil {
+			glog.Errorf("error parsing TPM TPMSAttest: %v", err)
+			return 1
+		}
+		nkCertifyInfo, err := decodedAttestation.Attested.Certify()
+		if err != nil {
+			glog.Errorf("error parsing TPM attestation Certify: %v", err)
+			return 1
+		}
+
+		glog.V(5).Infof("     NewKey derived Name from TPMSAttest: %s\n", hex.EncodeToString(nkCertifyInfo.Name.Buffer))
+		glog.V(5).Infof("     Certify Extra Data from TPMSAttest: %s\n", base64.StdEncoding.EncodeToString(decodedAttestation.ExtraData.Buffer))
+
+		// now dervie the TPM key "name" from the public key and the template we expect to see
+		decodedTPMNTPublic, err := tpm2.Unmarshal[tpm2.TPMTPublic](nk.CertificationParameters().Public)
+		if err != nil {
+			glog.Errorf("error parsing TPM public key structure: %v", err)
+			return 1
+		}
+
+		derivedECCPoint, err := decodedTPMNTPublic.Unique.ECC()
+		if err != nil {
+			glog.Errorf("error deriving ECC Point: %v", err)
+			return 1
+		}
+		ecDetail, err := decodedTPMNTPublic.Parameters.ECCDetail()
+		if err != nil {
+			glog.Errorf("error deriving ECC Parameters: %v", err)
+			return 1
+		}
+		crv, err := ecDetail.CurveID.Curve()
+		if err != nil {
+			glog.Errorf("error deriving ECC Curve: %v", err)
+			return 1
+		}
+		derivedpubKey := &ecdsa.PublicKey{
+			Curve: crv,
+			X:     big.NewInt(0).SetBytes(derivedECCPoint.X.Buffer),
+			Y:     big.NewInt(0).SetBytes(derivedECCPoint.Y.Buffer),
+		}
+		becc, err := x509.MarshalPKIXPublicKey(derivedpubKey)
+		if err != nil {
+			glog.Errorf("error deriving ECC Curve: %v", err)
+			return 1
+		}
+		derivedECCPubPEM := pem.EncodeToMemory(
+			&pem.Block{
+				Type:  "PUBLIC KEY",
+				Bytes: becc,
+			},
+		)
+
+		//  you can use the name and the certification information and signatrue along with the AK to verify it all
+		//  basically, you're using the AK public to verify the attestation now
+		derivedSigTPMTSIGNATURE, err := tpm2.Unmarshal[tpm2.TPMTSignature](nk.CertificationParameters().CreateSignature)
+		if err != nil {
+			glog.Errorf("error parsing TPM  derivedSigTPMTSIGNATURE structure: %v", err)
+			return 1
+		}
+
+		signatureRSA, err := derivedSigTPMTSIGNATURE.Signature.RSASSA()
+		if err != nil {
+			glog.Errorf("error parsing TPM  derivedSigTPMTSIGNATURE ecc: %v", err)
+			return 1
+		}
+
+		hsh := crypto.SHA256.New()
+		hsh.Write(nk.CertificationParameters().CreateAttestation) //signatureRSA.Sig.Buffer)
+
+		err = rsa.VerifyPKCS1v15(akcert.PublicKey.(*rsa.PublicKey), crypto.SHA256, hsh.Sum(nil), signatureRSA.Sig.Buffer)
+		if err != nil {
+			glog.Errorf("Failed to get verify signature digest with ak: %v", err)
+			return 1
+		}
+
+		glog.V(10).Infof("     ECDSA Signature verified\n")
+
+		// this is the template the ACME server should use to recreate the unique TPM "name"
+		//  the name includes the ECC Key attributes
+		expectedECCTemplate := tpm2.TPMTPublic{
+			Type:    tpm2.TPMAlgECC,
+			NameAlg: tpm2.TPMAlgSHA256,
+			ObjectAttributes: tpm2.TPMAObject{
+				SignEncrypt:         true,
+				FixedTPM:            true,
+				FixedParent:         true,
+				SensitiveDataOrigin: true,
+				UserWithAuth:        true,
+			},
+			AuthPolicy: tpm2.TPM2BDigest{},
+
+			Parameters: tpm2.NewTPMUPublicParms(
+				tpm2.TPMAlgECC,
+				&tpm2.TPMSECCParms{
+					CurveID: tpm2.TPMECCNistP256,
+					Scheme: tpm2.TPMTECCScheme{
+						Scheme: tpm2.TPMAlgECDSA,
+						Details: tpm2.NewTPMUAsymScheme(
+							tpm2.TPMAlgECDSA,
+							&tpm2.TPMSSigSchemeECDSA{
+								HashAlg: tpm2.TPMAlgSHA256,
+							},
+						),
+					},
+				},
+			),
+			Unique: tpm2.NewTPMUPublicID(
+				tpm2.TPMAlgECC,
+				&tpm2.TPMSECCPoint{
+					X: tpm2.TPM2BECCParameter{
+						Buffer: derivedpubKey.X.FillBytes(make([]byte, len(derivedpubKey.X.Bytes()))),
+					},
+					Y: tpm2.TPM2BECCParameter{
+						Buffer: derivedpubKey.Y.FillBytes(make([]byte, len(derivedpubKey.Y.Bytes()))),
+					},
+				},
+			),
+		}
+
+		derivedName, err := tpm2.ObjectName(&expectedECCTemplate)
+		if err != nil {
+			glog.Errorf("Failed to get nkDerived Name: %v", err)
+			return 1
+		}
+
+		glog.V(10).Infof("     Regenerated New Key objectAttributes:\n")
+		glog.V(10).Infof("       FixedParent: %t\n", decodedTPMNTPublic.ObjectAttributes.FixedParent)
+		glog.V(10).Infof("       SensitiveDataOrigin: %t\n", decodedTPMNTPublic.ObjectAttributes.SensitiveDataOrigin)
+		glog.V(10).Infof("       FixedTPM: %t\n", decodedTPMNTPublic.ObjectAttributes.FixedTPM)
+		glog.V(10).Infof("       Regenerated Name from PublicKey and template: %s\n", hex.EncodeToString(derivedName.Buffer))
+		glog.V(10).Infof("       Regenerated PublicKey: \n%s\n", derivedECCPubPEM)
+		// ####################### END: regenerate
 
 		encMode, err := cbor.CoreDetEncOptions().EncMode()
 		if err != nil {

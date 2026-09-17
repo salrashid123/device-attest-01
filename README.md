@@ -48,7 +48,6 @@ In this sample, once the x609 is issued, you can skip to the [Testing](#testing)
     - [go client](#go-client)
     - [openssl client](#openssl-client)
     - [python client](#python-client)     
-    - [Session Encryption](#session-encryption)
 * [HTTP ACME](#http-acme)    
 
 ---
@@ -120,7 +119,6 @@ For the TPM demo, startup a software tpm `swtpm`:
 
 Before an ACME certificate can get issued, the device must be attested.  This demo involves full TPM Remote Attestation and also verifies the TPM EventLog as part of the Quote-Verify flow.  The following starts a [software TPM](https://github.com/stefanberger/swtpm), and replays the events from a GCP Shielded VM's event log.  The net result is the PCR values the script will mimic a secure boot sequence from a GCP VM.  For more information, see [EventLog Replay](https://github.com/salrashid123/go_tpm_remote_attestation#setup-using-softwretpm)
 
-
 ```bash
 cd tpm/swtpm/
 # rm -rf myvtpm && mkdir myvtpm && swtpm_setup --tpmstate myvtpm --tpm2 --create-ek-cert
@@ -145,6 +143,8 @@ $ go run attestation_server/attestaion_server.go  \
         --expectedPCRMapSHA256=0:a0b5ff3383a1116bd7dc6df177c0c2d433b9ee1813ea958fa5d166a202cb2a85 \
         --v=40 -alsologtostderr
 ```
+
+The current go client and attestation server uses [go-attestation](https://github.com/google/go-tpm) library constructs because its easier.  If you would rather use low level constructs for remote attestation see [TPM Remote Attestation, Quote/Verify, NewKey Certification with TPM2_Direct](https://github.com/salrashid123/tpm2/tree/master/tpm_remote_attestation)
 
 ### Device Client
 
