@@ -641,7 +641,38 @@ func run() int {
 		// the key specifications (attributes, the TPM "name") and even the public key its going to trust and issue the x509 for
 		// the following steps are not done on the device; its done on the server.  Its just for demonstration here so you understand whats being done
 
-		decodedAttestation, err := tpm2.Unmarshal[tpm2.TPMSAttest](nk.CertificationParameters().CreateAttestation)
+		certificationSignature := nk.CertificationParameters().CreateSignature
+		certificationAttestation := nk.CertificationParameters().CreateAttestation
+		certificationPublic := nk.CertificationParameters().Public
+
+		//  first verify the attestation using the AK Public
+		derivedSigTPMTSIGNATURE, err := tpm2.Unmarshal[tpm2.TPMTSignature](certificationSignature)
+		if err != nil {
+			glog.Errorf("error parsing TPM  derivedSigTPMTSIGNATURE structure: %v", err)
+			return 1
+		}
+
+		signatureRSA, err := derivedSigTPMTSIGNATURE.Signature.RSASSA()
+		if err != nil {
+			glog.Errorf("error parsing TPM  derivedSigTPMTSIGNATURE ecc: %v", err)
+			return 1
+		}
+
+		hsh := crypto.SHA256.New()
+		hsh.Write(certificationAttestation)
+
+		err = rsa.VerifyPKCS1v15(akcert.PublicKey.(*rsa.PublicKey), crypto.SHA256, hsh.Sum(nil), signatureRSA.Sig.Buffer)
+		if err != nil {
+			glog.Errorf("Failed to get verify signature digest with ak: %v", err)
+			return 1
+		}
+
+		glog.V(10).Infof("     Verified Attestation Signature using AK Public Key\n")
+
+		// now derive the TPM 'name' from the attestation and extract the extraData
+		//  the extraData here is the hash of the keyauth string which the acme server can derive and compare (todo)
+
+		decodedAttestation, err := tpm2.Unmarshal[tpm2.TPMSAttest](certificationAttestation)
 		if err != nil {
 			glog.Errorf("error parsing TPM TPMSAttest: %v", err)
 			return 1
@@ -652,15 +683,20 @@ func run() int {
 			return 1
 		}
 
-		glog.V(5).Infof("     NewKey derived Name from TPMSAttest: %s\n", hex.EncodeToString(nkCertifyInfo.Name.Buffer))
-		glog.V(5).Infof("     Certify Extra Data from TPMSAttest: %s\n", base64.StdEncoding.EncodeToString(decodedAttestation.ExtraData.Buffer))
+		glog.V(5).Infof("     derived key Name from TPMSAttest: %s\n", hex.EncodeToString(nkCertifyInfo.Name.Buffer))
 
-		// now dervie the TPM key "name" from the public key and the template we expect to see
-		decodedTPMNTPublic, err := tpm2.Unmarshal[tpm2.TPMTPublic](nk.CertificationParameters().Public)
+		// todo verify the keyauth data
+		glog.V(5).Infof("     Certify Extra Data from TPMSAttest sha356sum(KEYAUTH): %s\n", base64.StdEncoding.EncodeToString(decodedAttestation.ExtraData.Buffer))
+
+		// now dervie the TPM key specifications from TPMTPublic
+		decodedTPMNTPublic, err := tpm2.Unmarshal[tpm2.TPMTPublic](certificationPublic)
 		if err != nil {
 			glog.Errorf("error parsing TPM public key structure: %v", err)
 			return 1
 		}
+
+		// key can be rsa or ecc, you i'm just using ecc; you can figure out the key type
+		// using decodedTPMNTPublic.NameAlg
 
 		derivedECCPoint, err := decodedTPMNTPublic.Unique.ECC()
 		if err != nil {
@@ -694,85 +730,35 @@ func run() int {
 			},
 		)
 
-		//  you can use the name and the certification information and signatrue along with the AK to verify it all
-		//  basically, you're using the AK public to verify the attestation now
-		derivedSigTPMTSIGNATURE, err := tpm2.Unmarshal[tpm2.TPMTSignature](nk.CertificationParameters().CreateSignature)
-		if err != nil {
-			glog.Errorf("error parsing TPM  derivedSigTPMTSIGNATURE structure: %v", err)
-			return 1
-		}
-
-		signatureRSA, err := derivedSigTPMTSIGNATURE.Signature.RSASSA()
-		if err != nil {
-			glog.Errorf("error parsing TPM  derivedSigTPMTSIGNATURE ecc: %v", err)
-			return 1
-		}
-
-		hsh := crypto.SHA256.New()
-		hsh.Write(nk.CertificationParameters().CreateAttestation) //signatureRSA.Sig.Buffer)
-
-		err = rsa.VerifyPKCS1v15(akcert.PublicKey.(*rsa.PublicKey), crypto.SHA256, hsh.Sum(nil), signatureRSA.Sig.Buffer)
-		if err != nil {
-			glog.Errorf("Failed to get verify signature digest with ak: %v", err)
-			return 1
-		}
-
-		glog.V(10).Infof("     ECDSA Signature verified\n")
-
-		// this is the template the ACME server should use to recreate the unique TPM "name"
-		//  the name includes the ECC Key attributes
-		expectedECCTemplate := tpm2.TPMTPublic{
-			Type:    tpm2.TPMAlgECC,
-			NameAlg: tpm2.TPMAlgSHA256,
-			ObjectAttributes: tpm2.TPMAObject{
-				SignEncrypt:         true,
-				FixedTPM:            true,
-				FixedParent:         true,
-				SensitiveDataOrigin: true,
-				UserWithAuth:        true,
-			},
-			AuthPolicy: tpm2.TPM2BDigest{},
-
-			Parameters: tpm2.NewTPMUPublicParms(
-				tpm2.TPMAlgECC,
-				&tpm2.TPMSECCParms{
-					CurveID: tpm2.TPMECCNistP256,
-					Scheme: tpm2.TPMTECCScheme{
-						Scheme: tpm2.TPMAlgECDSA,
-						Details: tpm2.NewTPMUAsymScheme(
-							tpm2.TPMAlgECDSA,
-							&tpm2.TPMSSigSchemeECDSA{
-								HashAlg: tpm2.TPMAlgSHA256,
-							},
-						),
-					},
-				},
-			),
-			Unique: tpm2.NewTPMUPublicID(
-				tpm2.TPMAlgECC,
-				&tpm2.TPMSECCPoint{
-					X: tpm2.TPM2BECCParameter{
-						Buffer: derivedpubKey.X.FillBytes(make([]byte, len(derivedpubKey.X.Bytes()))),
-					},
-					Y: tpm2.TPM2BECCParameter{
-						Buffer: derivedpubKey.Y.FillBytes(make([]byte, len(derivedpubKey.Y.Bytes()))),
-					},
-				},
-			),
-		}
-
-		derivedName, err := tpm2.ObjectName(&expectedECCTemplate)
+		// you can derive they key's "name" from the public template
+		derivedName, err := tpm2.ObjectName(decodedTPMNTPublic)
 		if err != nil {
 			glog.Errorf("Failed to get nkDerived Name: %v", err)
 			return 1
 		}
 
+		// now compare the 'name' thats in the ceritication info with the one in TPMT_PUBLIC
+		// if these don't match, the key provided in the template isn't what was signed in the attestation so rejcect it
+		if !bytes.Equal(derivedName.Buffer, nkCertifyInfo.Name.Buffer) {
+			glog.Errorf("Name of the EK from the certification does not match derived from expected template")
+			return 1
+		}
+
+		// Read the key attributes; these make sure the Key was only generated on the TPM (eg, fixedparent, sensitivedataorign,fixedtpm )
 		glog.V(10).Infof("     Regenerated New Key objectAttributes:\n")
 		glog.V(10).Infof("       FixedParent: %t\n", decodedTPMNTPublic.ObjectAttributes.FixedParent)
 		glog.V(10).Infof("       SensitiveDataOrigin: %t\n", decodedTPMNTPublic.ObjectAttributes.SensitiveDataOrigin)
 		glog.V(10).Infof("       FixedTPM: %t\n", decodedTPMNTPublic.ObjectAttributes.FixedTPM)
+		glog.V(10).Infof("       Decrypt: %t\n", decodedTPMNTPublic.ObjectAttributes.Decrypt)
+		glog.V(10).Infof("       SignEncrypt: %t\n", decodedTPMNTPublic.ObjectAttributes.SignEncrypt)
+		glog.V(10).Infof("       Restricted: %t\n", decodedTPMNTPublic.ObjectAttributes.Restricted)
+		glog.V(10).Infof("       UserWithAuth: %t\n", decodedTPMNTPublic.ObjectAttributes.UserWithAuth)
+		glog.V(10).Infof("       AuthPolicy: [%s]\n", hex.EncodeToString(decodedTPMNTPublic.AuthPolicy.Buffer))
 		glog.V(10).Infof("       Regenerated Name from PublicKey and template: %s\n", hex.EncodeToString(derivedName.Buffer))
 		glog.V(10).Infof("       Regenerated PublicKey: \n%s\n", derivedECCPubPEM)
+
+		// now wer'e done pretending what was done on the ACME server to verify the device; we'll move back to the device clients
+		// api call to the acme server
 		// ####################### END: regenerate
 
 		encMode, err := cbor.CoreDetEncOptions().EncMode()
@@ -973,7 +959,6 @@ func run() int {
 		} else {
 			glog.V(5).Infof("Issued Certificate: \n%s\n", issuedcertPrintable)
 		}
-
 	}
 
 	return 0
