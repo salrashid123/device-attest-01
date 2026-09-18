@@ -173,98 +173,97 @@ $ go run client/client.go -host 127.0.0.1:50051 \
     --stepCACertPath=$HOME/.step/certs/root_ca.crt \
       --eventLogPath=swtpm/binary_bios_measurements    --v=10 -alsologtostderr
 
-I0917 14:11:35.530506 1359517 client.go:133] Opening swtpm socket
-I0917 14:11:35.532228 1359517 client.go:175] Manufacturer: IBM
-I0917 14:11:35.532285 1359517 client.go:176] VendorInfo: SW   TPM
-I0917 14:11:35.532304 1359517 client.go:177] FirmwareVersionMajor: 8228
-I0917 14:11:35.532322 1359517 client.go:178] FirmwareVersionMinor: 293
-I0917 14:11:35.533189 1359517 client.go:188] EKCert Issuer: CN=swtpm-localca
-I0917 14:11:35.533242 1359517 client.go:205] EKCert SerialNumber: 1237
-I0917 14:11:35.533276 1359517 client.go:209] =============== OfferEK ===============
-I0917 14:11:35.544214 1359517 client.go:218] Verified EK Cert
-I0917 14:11:35.544271 1359517 client.go:220] =============== OfferAK ===============
-I0917 14:11:35.634911 1359517 client.go:245] Creating AK CSR
-I0917 14:11:35.640984 1359517 client.go:277] AK CSR 
+I0918 13:35:56.917725 1945891 client.go:133] Opening swtpm socket
+I0918 13:35:56.919458 1945891 client.go:175] Manufacturer: IBM
+I0918 13:35:56.919499 1945891 client.go:176] VendorInfo: SW   TPM
+I0918 13:35:56.919519 1945891 client.go:177] FirmwareVersionMajor: 8228
+I0918 13:35:56.919544 1945891 client.go:178] FirmwareVersionMinor: 293
+I0918 13:35:56.920313 1945891 client.go:188] EKCert Issuer: CN=swtpm-localca
+I0918 13:35:56.920358 1945891 client.go:205] EKCert SerialNumber: 1237
+I0918 13:35:56.920389 1945891 client.go:209] =============== OfferEK ===============
+I0918 13:35:56.930330 1945891 client.go:218] Verified EK Cert
+I0918 13:35:56.930371 1945891 client.go:220] =============== OfferAK ===============
+I0918 13:35:57.013336 1945891 client.go:245] Creating AK CSR
+I0918 13:35:57.017069 1945891 client.go:277] AK CSR 
 -----BEGIN CERTIFICATE REQUEST-----
 MIIClDCCAXwCAQAwHjEcMBoGA1UEAxMTYXR0ZXN0b3IuZG9tYWluLmNvbTCCASIw
-DQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAKDfnq7bqTyO1VzC5AoOh4hZ34tK
-J66+8tiYexRUGTY1Qh+7O97dxFtjjcnH6Gq4Wl+DJdjPCxD35XtTzoNHlfSyXtoR
-D74IBAopH6hdFQq3FlduhYGWM6bDR3YC/DdXZp3mk+YhuKgwCIIadkzcFMcs/cJG
-1K3NWrKGoOCMLXhQIjFQtlzPObGraEk7dml9ASF0U+8HUAkn0AU7Sz9wOpfNA7a6
-mI0CAehqEcSF1V+TvX1PrmOeN2r4BVga0RIZo8VYIy1v4WUA+jswgUvsPZv+HIoV
-SP6if9/PYp09zwtl2RaOZz1oN2RmNYs7ltwy5VnGsKGVedYS+e01tcwJa/cCAwEA
+DQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAMCPvFNpcIpp++0nX9lesIyq7MOu
+PdxMxhN1F6ScIVMiBul20MAxhr7P9DXGJJZcKwwElBrMyhvLaISRPcuHEwbsmY47
+t7VajtmWA9xpVy3zZHqUhOi2rQn4fMPsmD+QBoQTm7d7F5KecoMASBeuEVHnwYMB
+rOFXbD91J+0KATdWX76l1WUbx6frKh4VMK2xvsUTGaVsr5At9Pyl9e3ig3tkJs4n
+0cY/bFUaekiadI4S6/8anCDdjoRc2swQRhCz6EaTXbTaQDoqnmmw3Xe+P+EdE5wq
+9fKq18O07AHTQmNJ31pkTIQQnupHZptCWoqjkPvf7OT7xGlrC3UA/EhwH78CAwEA
 AaAxMC8GCSqGSIb3DQEJDjEiMCAwHgYDVR0RBBcwFYITYXR0ZXN0b3IuZG9tYWlu
-LmNvbTANBgkqhkiG9w0BAQsFAAOCAQEAGLtJ9u9oXtiU4o7EfHKdwUeH+pjwTeKN
-OWEJRp2/ygdeTY93sfXTtRkEFwM7SZx5bLfG69rIpNiLXQ4f+hILSV4VZrk86uZ0
-+8CnUznllygQVc+ssEzG3aSjczrFrLbYm9wVifgw7Gkye8Ib/1MsNoByk4JDTNxt
-1B7+8Ep5rlV9QUL1407/evn3c26NVG5H9ca/hXSMybWzfQuTHSxVNpCNr/8JSr6e
-C0CICVlV/9iQzYBiYaPmLzWx8TupYvFWVtMfGzUw9Wl4KFStUV4nYlMS/bqrbgLX
-byL5gBa4/zdZRzNo3GYoLZkT1Uzt65wap+OObH40FAL/kd5K/bd8jw==
+LmNvbTANBgkqhkiG9w0BAQsFAAOCAQEADE1C8fXN9T2lJTSSeIHHvwzD6T24z2sw
+FfVByfqx38n61wZwMpQPwFfNNz2vIwbE+C0LSMdrOHrLazzlnGxJuU859SqFJfLr
+/uW0K8ZGoChqPUrFizK0GnTBMqUCZOi1HNl1qvNyi6QQDi7b7jLo+tQCWducn+ea
+voeZks2HwmYYpiRm1BD6G+v63vx4ezNIptigrsccmQ0WvWWtlDxHXwx/6tz9L1ja
+7SniBOJ2FaHUMH2i2d9Yc54dRZX0BCCEA4grQEioPOejU99LnKYB0BxhNSofS0/m
+M/SE/uv30Lxwtj059l69Z1dHhA5evWBH1ELkIipBUzgZseeGrg23Yg==
 -----END CERTIFICATE REQUEST-----
 
-I0917 14:11:35.642679 1359517 client.go:288] Verified AK 
-I0917 14:11:35.642745 1359517 client.go:290] =============== GetMakeCredential ===============
-I0917 14:11:35.685124 1359517 client.go:319] EncryptedCredentials Secret 21xqc8dTBMLi+kzJgLOxjElRcy6jYi7Y1TKIvz14Rxo=
-I0917 14:11:35.685207 1359517 client.go:321] =============== SetActivateCredential ===============
-I0917 14:11:35.686430 1359517 client.go:330] SetActivateCredential complete 
-I0917 14:11:35.686510 1359517 client.go:332] =============== OfferQuote ===============
-I0917 14:11:35.687368 1359517 client.go:339] OfferQuote complete 
-I0917 14:11:35.687438 1359517 client.go:341] =============== SetQuote ===============
-I0917 14:11:35.704219 1359517 client.go:385] Issued AK Certificate: 
+I0918 13:35:57.018561 1945891 client.go:288] Verified AK 
+I0918 13:35:57.018620 1945891 client.go:290] =============== GetMakeCredential ===============
+I0918 13:35:57.035983 1945891 client.go:319] EncryptedCredentials Secret skOStS2o+3MXZjrsyeN2smg6FThk3ZxsqoVRpqHw1+Q=
+I0918 13:35:57.036031 1945891 client.go:321] =============== SetActivateCredential ===============
+I0918 13:35:57.036700 1945891 client.go:330] SetActivateCredential complete 
+I0918 13:35:57.036760 1945891 client.go:332] =============== OfferQuote ===============
+I0918 13:35:57.037468 1945891 client.go:339] OfferQuote complete 
+I0918 13:35:57.037502 1945891 client.go:341] =============== SetQuote ===============
+I0918 13:35:57.051240 1945891 client.go:385] Issued AK Certificate: 
 -----BEGIN CERTIFICATE-----
-MIIDXTCCAwOgAwIBAgIFAMDYOUgwCgYIKoZIzj0EAwIwWzELMAkGA1UEBhMCVVMx
-DzANBgNVBAoMBkdvb2dsZTEdMBsGA1UECwwUQXR0ZXN0YXRpb24gVmVyaWZpZXIx
-HDAaBgNVBAMME0F0dGVzdGF0aW9uIFJvb3QgQ0EwHhcNMjYwOTE3MTgxMTM1WhcN
-MjcwOTE3MTgxMTM1WjAAMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA
-oN+ertupPI7VXMLkCg6HiFnfi0onrr7y2Jh7FFQZNjVCH7s73t3EW2ONycfoarha
-X4Ml2M8LEPfle1POg0eV9LJe2hEPvggECikfqF0VCrcWV26FgZYzpsNHdgL8N1dm
-neaT5iG4qDAIghp2TNwUxyz9wkbUrc1asoag4IwteFAiMVC2XM85satoSTt2aX0B
-IXRT7wdQCSfQBTtLP3A6l80DtrqYjQIB6GoRxIXVX5O9fU+uY543avgFWBrREhmj
-xVgjLW/hZQD6OzCBS+w9m/4cihVI/qJ/389inT3PC2XZFo5nPWg3ZGY1izuW3DLl
-WcawoZV51hL57TW1zAlr9wIDAQABo4IBQjCCAT4wDgYDVR0PAQH/BAQDAgeAMBAG
-A1UdJQQJMAcGBWeBBQgDMAwGA1UdEwEB/wQCMAAwHwYDVR0jBBgwFoAUUA0oLf1M
-FqjzMvQhFZys3Xnv4jkwJwYDVR0gBCAwHjAIBgZngQULAQEwCAYGZ4EFCwECMAgG
-BmeBBQsBAzCBwQYDVR0RBIG5MIG2oEwGCCsGAQUFBwgEoEAwPgYFZ4EFAQKENTAw
-MDAxMDE0OjJmNmQ1MWRiNzczNmVjYjkyZGNkZTIyNzgwMzFjOGIxZWNjMzg3YjQ6
-NGQ1oCAGCCsGAQUFBwgDoBQwEgwQYzE3OTMzZDE3NjkyMjk2NKREMEIxFjAUBgVn
-gQUCARMLaWQ6MDAwMDEwMTQxEDAOBgVngQUCAhMFc3d0cG0xFjAUBgVngQUCAxML
-aWQ6MjAyNDAxMjUwCgYIKoZIzj0EAwIDSAAwRQIhAP/yN+V/EvNdYuRv3Yf6DvI7
-H5Ox5Qkb/A59hpq4q+H/AiBEVtqbgNwblkEdkx9RBTw8qu3iloExZBXfFLFAjCvM
-eQ==
+MIIDXDCCAwKgAwIBAgIEIr2CBDAKBggqhkjOPQQDAjBbMQswCQYDVQQGEwJVUzEP
+MA0GA1UECgwGR29vZ2xlMR0wGwYDVQQLDBRBdHRlc3RhdGlvbiBWZXJpZmllcjEc
+MBoGA1UEAwwTQXR0ZXN0YXRpb24gUm9vdCBDQTAeFw0yNjA5MTgxNzM1NTdaFw0y
+NzA5MTgxNzM1NTdaMAAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDA
+j7xTaXCKafvtJ1/ZXrCMquzDrj3cTMYTdReknCFTIgbpdtDAMYa+z/Q1xiSWXCsM
+BJQazMoby2iEkT3LhxMG7JmOO7e1Wo7ZlgPcaVct82R6lITotq0J+HzD7Jg/kAaE
+E5u3exeSnnKDAEgXrhFR58GDAazhV2w/dSftCgE3Vl++pdVlG8en6yoeFTCtsb7F
+ExmlbK+QLfT8pfXt4oN7ZCbOJ9HGP2xVGnpImnSOEuv/Gpwg3Y6EXNrMEEYQs+hG
+k1202kA6Kp5psN13vj/hHROcKvXyqtfDtOwB00JjSd9aZEyEEJ7qR2abQlqKo5D7
+3+zk+8Rpawt1APxIcB+/AgMBAAGjggFCMIIBPjAOBgNVHQ8BAf8EBAMCB4AwEAYD
+VR0lBAkwBwYFZ4EFCAMwDAYDVR0TAQH/BAIwADAfBgNVHSMEGDAWgBRQDSgt/UwW
+qPMy9CEVnKzdee/iOTAnBgNVHSAEIDAeMAgGBmeBBQsBATAIBgZngQULAQIwCAYG
+Z4EFCwEDMIHBBgNVHREEgbkwgbagTAYIKwYBBQUHCASgQDA+BgVngQUBAoQ1MDAw
+MDEwMTQ6MmY2ZDUxZGI3NzM2ZWNiOTJkY2RlMjI3ODAzMWM4YjFlY2MzODdiNDo0
+ZDWgIAYIKwYBBQUHCAOgFDASDBBlZTA3NGE5MThiMGM2MzQ2pEQwQjEWMBQGBWeB
+BQIBEwtpZDowMDAwMTAxNDEQMA4GBWeBBQICEwVzd3RwbTEWMBQGBWeBBQIDEwtp
+ZDoyMDI0MDEyNTAKBggqhkjOPQQDAgNIADBFAiEAtN4Am5JtRx7W4LlMhV/ZjNAW
+D50xMk2j25aZFxnLO3sCIGK6tg63zyjv2PZEnZPfMCfRGCWeRrY/6W3eiUVIVNlA
 -----END CERTIFICATE-----
 
 Certificate:
     Data:
         Version: 3 (0x2)
-        Serial Number: 3235395912 (0xc0d83948)
+        Serial Number: 582844932 (0x22bd8204)
         Signature Algorithm: ECDSA-SHA256
         Issuer: C=US,O=Google,OU=Attestation Verifier,CN=Attestation Root CA
         Validity
-            Not Before: Sep 17 18:11:35 2026 UTC
-            Not After : Sep 17 18:11:35 2027 UTC
+            Not Before: Sep 18 17:35:57 2026 UTC
+            Not After : Sep 18 17:35:57 2027 UTC
         Subject:
         Subject Public Key Info:
             Public Key Algorithm: RSA
                 Public-Key: (2048 bit)
                 Modulus:
-                    a0:df:9e:ae:db:a9:3c:8e:d5:5c:c2:e4:0a:0e:87:
-                    88:59:df:8b:4a:27:ae:be:f2:d8:98:7b:14:54:19:
-                    36:35:42:1f:bb:3b:de:dd:c4:5b:63:8d:c9:c7:e8:
-                    6a:b8:5a:5f:83:25:d8:cf:0b:10:f7:e5:7b:53:ce:
-                    83:47:95:f4:b2:5e:da:11:0f:be:08:04:0a:29:1f:
-                    a8:5d:15:0a:b7:16:57:6e:85:81:96:33:a6:c3:47:
-                    76:02:fc:37:57:66:9d:e6:93:e6:21:b8:a8:30:08:
-                    82:1a:76:4c:dc:14:c7:2c:fd:c2:46:d4:ad:cd:5a:
-                    b2:86:a0:e0:8c:2d:78:50:22:31:50:b6:5c:cf:39:
-                    b1:ab:68:49:3b:76:69:7d:01:21:74:53:ef:07:50:
-                    09:27:d0:05:3b:4b:3f:70:3a:97:cd:03:b6:ba:98:
-                    8d:02:01:e8:6a:11:c4:85:d5:5f:93:bd:7d:4f:ae:
-                    63:9e:37:6a:f8:05:58:1a:d1:12:19:a3:c5:58:23:
-                    2d:6f:e1:65:00:fa:3b:30:81:4b:ec:3d:9b:fe:1c:
-                    8a:15:48:fe:a2:7f:df:cf:62:9d:3d:cf:0b:65:d9:
-                    16:8e:67:3d:68:37:64:66:35:8b:3b:96:dc:32:e5:
-                    59:c6:b0:a1:95:79:d6:12:f9:ed:35:b5:cc:09:6b:
-                    f7
+                    c0:8f:bc:53:69:70:8a:69:fb:ed:27:5f:d9:5e:b0:
+                    8c:aa:ec:c3:ae:3d:dc:4c:c6:13:75:17:a4:9c:21:
+                    53:22:06:e9:76:d0:c0:31:86:be:cf:f4:35:c6:24:
+                    96:5c:2b:0c:04:94:1a:cc:ca:1b:cb:68:84:91:3d:
+                    cb:87:13:06:ec:99:8e:3b:b7:b5:5a:8e:d9:96:03:
+                    dc:69:57:2d:f3:64:7a:94:84:e8:b6:ad:09:f8:7c:
+                    c3:ec:98:3f:90:06:84:13:9b:b7:7b:17:92:9e:72:
+                    83:00:48:17:ae:11:51:e7:c1:83:01:ac:e1:57:6c:
+                    3f:75:27:ed:0a:01:37:56:5f:be:a5:d5:65:1b:c7:
+                    a7:eb:2a:1e:15:30:ad:b1:be:c5:13:19:a5:6c:af:
+                    90:2d:f4:fc:a5:f5:ed:e2:83:7b:64:26:ce:27:d1:
+                    c6:3f:6c:55:1a:7a:48:9a:74:8e:12:eb:ff:1a:9c:
+                    20:dd:8e:84:5c:da:cc:10:46:10:b3:e8:46:93:5d:
+                    b4:da:40:3a:2a:9e:69:b0:dd:77:be:3f:e1:1d:13:
+                    9c:2a:f5:f2:aa:d7:c3:b4:ec:01:d3:42:63:49:df:
+                    5a:64:4c:84:10:9e:ea:47:66:9b:42:5a:8a:a3:90:
+                    fb:df:ec:e4:fb:c4:69:6b:0b:75:00:fc:48:70:1f:
+                    bf
                 Exponent: 65537 (0x10001)
         X509v3 extensions:
             X509v3 Key Usage: critical
@@ -281,51 +280,56 @@ Certificate:
                 Policy: 2.23.133.11.1.3
             X509v3 Subject Alternative Name:
                 Hardware Module Name: Type: 2.23.133.1.2, Serial Number: 00001014:2f6d51db7736ecb92dcde2278031c8b1ecc387b4:4d5
-                Permanent Identifier: c17933d176922964
+                Permanent Identifier: ee074a918b0c6346
                 TPM Manufacturer: id:00001014
                 TPM Model: swtpm
                 TPM Version: id:20240125
     Signature Algorithm: ECDSA-SHA256
-         30:45:02:21:00:ff:f2:37:e5:7f:12:f3:5d:62:e4:6f:dd:87:
-         fa:0e:f2:3b:1f:93:b1:e5:09:1b:fc:0e:7d:86:9a:b8:ab:e1:
-         ff:02:20:44:56:da:9b:80:dc:1b:96:41:1d:93:1f:51:05:3c:
-         3c:aa:ed:e2:96:81:31:64:15:df:14:b1:40:8c:2b:cc:79
+         30:45:02:21:00:b4:de:00:9b:92:6d:47:1e:d6:e0:b9:4c:85:
+         5f:d9:8c:d0:16:0f:9d:31:32:4d:a3:db:96:99:17:19:cb:3b:
+         7b:02:20:62:ba:b6:0e:b7:cf:28:ef:d8:f6:44:9d:93:df:30:
+         27:d1:18:25:9e:46:b6:3f:e9:6d:de:89:45:48:54:d9:40
 
-I0917 14:11:35.705309 1359517 client.go:387] =============== Create new Key ===============
-I0917 14:11:35.705403 1359517 client.go:402] Extracted Permanent Identfier: c17933d176922964
-I0917 14:11:35.705694 1359517 client.go:416] Extracted HardwareSerialNumber: 00001014:2f6d51db7736ecb92dcde2278031c8b1ecc387b4:4d5
-I0917 14:11:35.705769 1359517 client.go:418]      Starting ACME Key generation
-I0917 14:11:35.729603 1359517 client.go:465] Successfully registered ACME account.
-I0917 14:11:35.741500 1359517 client.go:474] Order created. URI: https://ca.domain.com:8443/acme/acme-da/order/MVuKEeQUEoEdBKQ4OsUu7YYq0kilZEv8
-I0917 14:11:35.747237 1359517 client.go:499] Fulfill challenge token: Zj81KIuk2YxowWclagoqCf3mC3sO9Uyz
-I0917 14:11:35.747349 1359517 client.go:501] =============== Create New Key and set challengToken ===============
-I0917 14:11:35.747433 1359517 client.go:512] KEYAUTH: Zj81KIuk2YxowWclagoqCf3mC3sO9Uyz.A2X3tkJk7itV64WdXN3PjFLFoimzwZBSDzu8yS9-kQI
-I0917 14:11:35.747494 1359517 client.go:513] sha356sum(KEYAUTH): hVHqoV1u0Qch/6FRRTz8FMwMsfFQECGjYWEyZPdPjrE=
-I0917 14:11:35.747553 1359517 client.go:514] Create a TPM based key
-I0917 14:11:35.762627 1359517 client.go:578] NewKey Name 000b4ebdcd664a254140bcde7d82dea2f64dac7d76eddc9e6ee67fad91b7e3c93db2
-I0917 14:11:35.762824 1359517 client.go:599] Generated ECC Public 
+I0918 13:35:57.051339 1945891 client.go:387] =============== Create new Key ===============
+I0918 13:35:57.051380 1945891 client.go:402] Extracted Permanent Identfier: ee074a918b0c6346
+I0918 13:35:57.051419 1945891 client.go:416] Extracted HardwareSerialNumber: 00001014:2f6d51db7736ecb92dcde2278031c8b1ecc387b4:4d5
+I0918 13:35:57.051453 1945891 client.go:418]      Starting ACME Key generation
+I0918 13:35:57.075783 1945891 client.go:465] Successfully registered ACME account.
+I0918 13:35:57.084436 1945891 client.go:474] Order created. URI: https://ca.domain.com:8443/acme/acme-da/order/LXP21xDVOtxVbK55eDLi3PN2bIPSICZO
+I0918 13:35:57.089036 1945891 client.go:499] Fulfill challenge token: eBQWtPewG2kWUSXhFPqp68CvUb8W3H9o
+I0918 13:35:57.089115 1945891 client.go:501] =============== Create New Key and set challengToken ===============
+I0918 13:35:57.089248 1945891 client.go:512] KEYAUTH: eBQWtPewG2kWUSXhFPqp68CvUb8W3H9o.E0KvmeGgK0cE5coq2qTlF1iGKJNIjx5TEHepJLsNaDE
+I0918 13:35:57.089311 1945891 client.go:513] sha356sum(KEYAUTH): rsNq4kiGlglD1eni/bYA45M8Myj3khbzr3jyny8OAR0=
+I0918 13:35:57.089371 1945891 client.go:514] Create a TPM based key
+I0918 13:35:57.100903 1945891 client.go:578] NewKey Name 000b25d1e00ee36a16ff2aa883c2f51dfe01223b79621d1fcf10aff64e3573e7250f
+I0918 13:35:57.101042 1945891 client.go:599] Generated ECC Public 
 -----BEGIN PUBLIC KEY-----
-MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEUc2gOVkQ7Nrb8R/0ZRZGft5ZSlak
-Rf47mRu9ze8ezHo7iJWP7cQPQFdzqEHyJJO2g+PwXujlnIhINXHbs/lX8g==
+MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEtybgO7jkWFp/QqeDRojN4OO5i1FM
+yE5ptIlxthR8vh7RUYj7QSGPDMftP/Kc5cGqxjhOLhtHZ7yaM11IjYbIWQ==
 -----END PUBLIC KEY-----
-I0917 14:11:35.763211 1359517 client.go:655]      NewKey derived Name from TPMSAttest: 000b4ebdcd664a254140bcde7d82dea2f64dac7d76eddc9e6ee67fad91b7e3c93db2
-I0917 14:11:35.763300 1359517 client.go:656]      Certify Extra Data from TPMSAttest: hVHqoV1u0Qch/6FRRTz8FMwMsfFQECGjYWEyZPdPjrE=
-I0917 14:11:35.763704 1359517 client.go:720]      ECDSA Signature verified
-I0917 14:11:35.763919 1359517 client.go:770]      Regenerated New Key objectAttributes:
-I0917 14:11:35.764003 1359517 client.go:771]        FixedParent: true
-I0917 14:11:35.764083 1359517 client.go:772]        SensitiveDataOrigin: true
-I0917 14:11:35.764156 1359517 client.go:773]        FixedTPM: true
-I0917 14:11:35.764228 1359517 client.go:774]        Regenerated Name from PublicKey and template: 000b4ebdcd664a254140bcde7d82dea2f64dac7d76eddc9e6ee67fad91b7e3c93db2
-I0917 14:11:35.764302 1359517 client.go:775]        Regenerated PublicKey: 
+I0918 13:35:57.101612 1945891 client.go:670]      Verified Attestation Signature using AK Public Key
+I0918 13:35:57.101755 1945891 client.go:686]      derived key Name from TPMSAttest: 000b25d1e00ee36a16ff2aa883c2f51dfe01223b79621d1fcf10aff64e3573e7250f
+I0918 13:35:57.101827 1945891 client.go:689]      Certify Extra Data from TPMSAttest sha356sum(KEYAUTH): rsNq4kiGlglD1eni/bYA45M8Myj3khbzr3jyny8OAR0=
+I0918 13:35:57.102123 1945891 client.go:748]      Regenerated New Key objectAttributes:
+I0918 13:35:57.102200 1945891 client.go:749]        FixedParent: true
+I0918 13:35:57.102274 1945891 client.go:750]        SensitiveDataOrigin: true
+I0918 13:35:57.102345 1945891 client.go:751]        FixedTPM: true
+I0918 13:35:57.102418 1945891 client.go:752]        Decrypt: false
+I0918 13:35:57.102490 1945891 client.go:753]        SignEncrypt: true
+I0918 13:35:57.102563 1945891 client.go:754]        Restricted: false
+I0918 13:35:57.102637 1945891 client.go:755]        UserWithAuth: true
+I0918 13:35:57.102710 1945891 client.go:756]        AuthPolicy: []
+I0918 13:35:57.102785 1945891 client.go:757]        Regenerated Name from PublicKey and template: 000b25d1e00ee36a16ff2aa883c2f51dfe01223b79621d1fcf10aff64e3573e7250f
+I0918 13:35:57.102863 1945891 client.go:758]        Regenerated PublicKey: 
 -----BEGIN PUBLIC KEY-----
-MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEUc2gOVkQ7Nrb8R/0ZRZGft5ZSlak
-Rf47mRu9ze8ezHo7iJWP7cQPQFdzqEHyJJO2g+PwXujlnIhINXHbs/lX8g==
+MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEtybgO7jkWFp/QqeDRojN4OO5i1FM
+yE5ptIlxthR8vh7RUYj7QSGPDMftP/Kc5cGqxjhOLhtHZ7yaM11IjYbIWQ==
 -----END PUBLIC KEY-----
 
-I0917 14:11:38.766304 1359517 client.go:795] started server accepting challenge
-I0917 14:11:38.783664 1359517 client.go:808] Waiting for order readiness validation...
-I0917 14:11:38.795508 1359517 client.go:862] Finalizing order with CSR...
-I0917 14:11:38.816528 1359517 client.go:950] Acme Root Certificate: 
+I0918 13:36:00.105188 1945891 client.go:781] started server accepting challenge
+I0918 13:36:00.115553 1945891 client.go:794] Waiting for order readiness validation...
+I0918 13:36:00.125169 1945891 client.go:848] Finalizing order with CSR...
+I0918 13:36:00.145245 1945891 client.go:936] Acme Root Certificate: 
 Certificate:
     Data:
         Version: 3 (0x2)
@@ -361,28 +365,28 @@ Certificate:
          6e:02:20:65:b0:14:3e:39:60:7e:04:e4:63:e1:83:c2:72:75:
          f2:d8:30:9b:70:ae:87:e6:9e:82:4b:ba:cd:7a:45:2b:60
 
-I0917 14:11:38.817086 1359517 client.go:974] Issued Certificate: 
+I0918 13:36:00.146001 1945891 client.go:960] Issued Certificate: 
 Certificate:
     Data:
         Version: 3 (0x2)
-        Serial Number: 33606931744527285064901955453127966387 (0x194875a99021dee1cc9751bad30b3eb3)
+        Serial Number: 175721933841137646965138916707233413711 (0x8432d03cc0f2d79323f5e99eb0b7ba4f)
         Signature Algorithm: ECDSA-SHA256
         Issuer: O=mTLS ACME CA,CN=mTLS ACME CA Intermediate CA
         Validity
-            Not Before: Sep 17 18:10:35 2026 UTC
-            Not After : Sep 18 18:11:35 2026 UTC
-        Subject: CN=c17933d176922964
+            Not Before: Sep 18 17:34:57 2026 UTC
+            Not After : Sep 19 17:35:57 2026 UTC
+        Subject: CN=ee074a918b0c6346
         Subject Public Key Info:
             Public Key Algorithm: ECDSA
                 Public-Key: (256 bit)
                 X:
-                    51:cd:a0:39:59:10:ec:da:db:f1:1f:f4:65:16:46:
-                    7e:de:59:4a:56:a4:45:fe:3b:99:1b:bd:cd:ef:1e:
-                    cc:7a
+                    b7:26:e0:3b:b8:e4:58:5a:7f:42:a7:83:46:88:cd:
+                    e0:e3:b9:8b:51:4c:c8:4e:69:b4:89:71:b6:14:7c:
+                    be:1e
                 Y:
-                    3b:88:95:8f:ed:c4:0f:40:57:73:a8:41:f2:24:93:
-                    b6:83:e3:f0:5e:e8:e5:9c:88:48:35:71:db:b3:f9:
-                    57:f2
+                    d1:51:88:fb:41:21:8f:0c:c7:ed:3f:f2:9c:e5:c1:
+                    aa:c6:38:4e:2e:1b:47:67:bc:9a:33:5d:48:8d:86:
+                    c8:59
                 Curve: P-256
         X509v3 extensions:
             X509v3 Key Usage: critical
@@ -390,21 +394,21 @@ Certificate:
             X509v3 Extended Key Usage:
                 Client Authentication
             X509v3 Subject Key Identifier:
-                5A:D1:D9:D8:1A:89:FE:0C:EE:F8:2A:F0:AF:36:40:EF:53:31:BB:73
+                EF:BD:8C:78:FB:8D:EA:DB:E8:13:C1:BA:8F:14:B9:EB:61:31:5C:DD
             X509v3 Authority Key Identifier:
                 29:11:5A:03:4A:C8:42:18:B4:03:39:88:25:10:67:ED:E3:28:7E:E7
             X509v3 Subject Alternative Name:
-                Permanent Identifier: c17933d176922964
+                Permanent Identifier: ee074a918b0c6346
             X509v3 Step Provisioner:
                 Type: ACME
                 Name: acme-da
     Signature Algorithm: ECDSA-SHA256
-         30:44:02:20:3a:fe:ed:d1:ea:7d:07:ca:d1:d1:2e:a7:24:ab:
-         76:36:1f:5a:6a:8b:03:9a:ec:6f:8c:ef:30:ce:81:62:a0:cd:
-         02:20:0b:e0:c5:de:13:6e:b5:b7:61:82:66:93:3c:92:34:d3:
-         3b:27:73:6c:69:d7:b6:d7:d9:6b:e1:ea:28:19:7f:3d
+         30:45:02:20:4e:62:1a:e0:5b:ba:11:79:1c:9f:a8:ff:4c:9c:
+         15:74:47:6c:4a:f9:c8:03:9d:cb:42:05:01:3a:21:a8:ef:94:
+         02:21:00:b4:d4:f6:e8:c7:16:82:5d:18:36:54:52:b4:50:78:
+         34:ee:68:cf:2e:8e:9c:05:c4:b1:96:eb:59:ce:01:95:14
 
-I0917 14:11:38.817477 1359517 client.go:971] Intermediate Certificate: 
+I0918 13:36:00.146502 1945891 client.go:957] Intermediate Certificate: 
 Certificate:
     Data:
         Version: 3 (0x2)
@@ -452,9 +456,9 @@ $ go run attestation_server/attestaion_server.go
      --ekrootCA swtpm/config/var/lib/swtpm-localca/issuercert.pem    \
      --expectedPCRMapSHA256=0:a0b5ff3383a1116bd7dc6df177c0c2d433b9ee1813ea958fa5d166a202cb2a85         --v=40 -alsologtostderr
 
-I0917 14:11:24.333843 1359145 attestaion_server.go:968] Starting gRPC server on port :50051
-I0917 14:11:35.542020 1359145 attestaion_server.go:158] ======= OfferEK ========
-I0917 14:11:35.542761 1359145 attestaion_server.go:181] EK Certificate: 
+I0918 13:35:52.716923 1945701 attestaion_server.go:968] Starting gRPC server on port :50051
+I0918 13:35:56.928059 1945701 attestaion_server.go:158] ======= OfferEK ========
+I0918 13:35:56.928654 1945701 attestaion_server.go:181] EK Certificate: 
 Certificate:
     Data:
         Version: 3 (0x2)
@@ -527,13 +531,13 @@ Certificate:
          12:b6:7f:bd:a0:ce:d1:30:8c:31:82:53:56:7b:7b:91:53:8e:
          4b:5b:45:b6:6a:7e
 
-I0917 14:11:35.542879 1359145 attestaion_server.go:212]      TPM Manufacturer id:00001014
-I0917 14:11:35.542896 1359145 attestaion_server.go:215]      TPM Model swtpm
-I0917 14:11:35.542910 1359145 attestaion_server.go:219]      TPM Version id:20240125
-I0917 14:11:35.542931 1359145 attestaion_server.go:251]      TPM Family 2.0
-I0917 14:11:35.542948 1359145 attestaion_server.go:252]      TPM Level 0
-I0917 14:11:35.542965 1359145 attestaion_server.go:253]      TPM Revision 183
-I0917 14:11:35.542996 1359145 attestaion_server.go:268]         EKCertificate ========
+I0918 13:35:56.928785 1945701 attestaion_server.go:212]      TPM Manufacturer id:00001014
+I0918 13:35:56.928804 1945701 attestaion_server.go:215]      TPM Model swtpm
+I0918 13:35:56.928823 1945701 attestaion_server.go:219]      TPM Version id:20240125
+I0918 13:35:56.928849 1945701 attestaion_server.go:251]      TPM Family 2.0
+I0918 13:35:56.928871 1945701 attestaion_server.go:252]      TPM Level 0
+I0918 13:35:56.928891 1945701 attestaion_server.go:253]      TPM Revision 183
+I0918 13:35:56.928934 1945701 attestaion_server.go:268]         EKCertificate ========
 -----BEGIN CERTIFICATE-----
 MIID9TCCAl2gAwIBAgICBNUwDQYJKoZIhvcNAQELBQAwGDEWMBQGA1UEAxMNc3d0
 cG0tbG9jYWxjYTAgFw0yNjA5MDIxMzE1MjNaGA85OTk5MTIzMTIzNTk1OVowEjEQ
@@ -559,10 +563,10 @@ bFJpZAFf4NgAy5jnVLN7tTTv39QgrzRjgMPzsAVyMu9QErZ/vaDO0TCMMYJTVnt7
 kVOOS1tFtmp+
 -----END CERTIFICATE-----
 
-I0917 14:11:35.543072 1359145 attestaion_server.go:284]      EKCert  Issuer CN=swtpm-localca
-I0917 14:11:35.543116 1359145 attestaion_server.go:285]      EKCert  IssuingCertificateURL []
-I0917 14:11:35.543145 1359145 attestaion_server.go:286]      EKCert  SerialNumber 1237
-I0917 14:11:35.543167 1359145 attestaion_server.go:288]     EkCert Public Key 
+I0918 13:35:56.929020 1945701 attestaion_server.go:284]      EKCert  Issuer CN=swtpm-localca
+I0918 13:35:56.929074 1945701 attestaion_server.go:285]      EKCert  IssuingCertificateURL []
+I0918 13:35:56.929104 1945701 attestaion_server.go:286]      EKCert  SerialNumber 1237
+I0918 13:35:56.929130 1945701 attestaion_server.go:288]     EkCert Public Key 
 -----BEGIN PUBLIC KEY-----
 MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAwJeerh1yB9bYbI/QZldk
 Dl0esVUcoodQAox8sbGEaWImeaH75Xw3IkBegeU+SmXIWl5WeyyYSZ9x366pKGhp
@@ -573,125 +577,124 @@ qIoF6EGPr1ANDa1rTpTxZglKPvNB7sukNRZ9rpIivuXQhuzFszZ3YPJptf3I4dpP
 WQIDAQAB
 -----END PUBLIC KEY-----
 
-I0917 14:11:35.543195 1359145 attestaion_server.go:291]     Verifying EKCert
-I0917 14:11:35.543389 1359145 attestaion_server.go:319]      EKCert Includes tcg-kp-EKCertificate ExtendedKeyUsage 2.23.133.8.1
-I0917 14:11:35.543772 1359145 attestaion_server.go:348]     EKCert Verified
-I0917 14:11:35.543798 1359145 attestaion_server.go:362] =============== end OfferEK ===============
-I0917 14:11:35.641788 1359145 attestaion_server.go:367] ======= OfferAK ========
-I0917 14:11:35.642078 1359145 attestaion_server.go:411]       ak public 
+I0918 13:35:56.929172 1945701 attestaion_server.go:291]     Verifying EKCert
+I0918 13:35:56.929521 1945701 attestaion_server.go:319]      EKCert Includes tcg-kp-EKCertificate ExtendedKeyUsage 2.23.133.8.1
+I0918 13:35:56.929891 1945701 attestaion_server.go:348]     EKCert Verified
+I0918 13:35:56.929920 1945701 attestaion_server.go:362] =============== end OfferEK ===============
+I0918 13:35:57.017840 1945701 attestaion_server.go:367] ======= OfferAK ========
+I0918 13:35:57.018124 1945701 attestaion_server.go:411]       ak public 
 -----BEGIN PUBLIC KEY-----
-MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAoN+ertupPI7VXMLkCg6H
-iFnfi0onrr7y2Jh7FFQZNjVCH7s73t3EW2ONycfoarhaX4Ml2M8LEPfle1POg0eV
-9LJe2hEPvggECikfqF0VCrcWV26FgZYzpsNHdgL8N1dmneaT5iG4qDAIghp2TNwU
-xyz9wkbUrc1asoag4IwteFAiMVC2XM85satoSTt2aX0BIXRT7wdQCSfQBTtLP3A6
-l80DtrqYjQIB6GoRxIXVX5O9fU+uY543avgFWBrREhmjxVgjLW/hZQD6OzCBS+w9
-m/4cihVI/qJ/389inT3PC2XZFo5nPWg3ZGY1izuW3DLlWcawoZV51hL57TW1zAlr
-9wIDAQAB
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAwI+8U2lwimn77Sdf2V6w
+jKrsw6493EzGE3UXpJwhUyIG6XbQwDGGvs/0NcYkllwrDASUGszKG8tohJE9y4cT
+BuyZjju3tVqO2ZYD3GlXLfNkepSE6LatCfh8w+yYP5AGhBObt3sXkp5ygwBIF64R
+UefBgwGs4VdsP3Un7QoBN1ZfvqXVZRvHp+sqHhUwrbG+xRMZpWyvkC30/KX17eKD
+e2QmzifRxj9sVRp6SJp0jhLr/xqcIN2OhFzazBBGELPoRpNdtNpAOiqeabDdd74/
+4R0TnCr18qrXw7TsAdNCY0nfWmRMhBCe6kdmm0JaiqOQ+9/s5PvEaWsLdQD8SHAf
+vwIDAQAB
 -----END PUBLIC KEY-----
 
-I0917 14:11:35.642335 1359145 attestaion_server.go:425] =============== end GetAK ===============
-I0917 14:11:35.643070 1359145 attestaion_server.go:431] ======= GetMakeCredential ========
-I0917 14:11:35.643093 1359145 attestaion_server.go:448] =============== end GetMakeCredential ===============
-I0917 14:11:35.643613 1359145 attestaion_server.go:462]       Outbound Secret: 21xqc8dTBMLi+kzJgLOxjElRcy6jYi7Y1TKIvz14Rxo=
-I0917 14:11:35.685870 1359145 attestaion_server.go:480] ======= SetActivateCredential ========
-I0917 14:11:35.685924 1359145 attestaion_server.go:513] =============== end SetActivateCredential ===============
-I0917 14:11:35.687005 1359145 attestaion_server.go:518] ======= OfferQuote ========
-I0917 14:11:35.687057 1359145 attestaion_server.go:543] =============== end OfferQuote ===============
-I0917 14:11:35.697193 1359145 attestaion_server.go:550] ======= SetQuote ========
-I0917 14:11:35.698824 1359145 attestaion_server.go:602]       quote-attested public 
+I0918 13:35:57.018242 1945701 attestaion_server.go:425] =============== end GetAK ===============
+I0918 13:35:57.019093 1945701 attestaion_server.go:431] ======= GetMakeCredential ========
+I0918 13:35:57.019130 1945701 attestaion_server.go:448] =============== end GetMakeCredential ===============
+I0918 13:35:57.019655 1945701 attestaion_server.go:462]       Outbound Secret: skOStS2o+3MXZjrsyeN2smg6FThk3ZxsqoVRpqHw1+Q=
+I0918 13:35:57.036419 1945701 attestaion_server.go:480] ======= SetActivateCredential ========
+I0918 13:35:57.036463 1945701 attestaion_server.go:513] =============== end SetActivateCredential ===============
+I0918 13:35:57.037074 1945701 attestaion_server.go:518] ======= OfferQuote ========
+I0918 13:35:57.037111 1945701 attestaion_server.go:543] =============== end OfferQuote ===============
+I0918 13:35:57.045343 1945701 attestaion_server.go:550] ======= SetQuote ========
+I0918 13:35:57.047131 1945701 attestaion_server.go:602]       quote-attested public 
 -----BEGIN PUBLIC KEY-----
-MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAoN+ertupPI7VXMLkCg6H
-iFnfi0onrr7y2Jh7FFQZNjVCH7s73t3EW2ONycfoarhaX4Ml2M8LEPfle1POg0eV
-9LJe2hEPvggECikfqF0VCrcWV26FgZYzpsNHdgL8N1dmneaT5iG4qDAIghp2TNwU
-xyz9wkbUrc1asoag4IwteFAiMVC2XM85satoSTt2aX0BIXRT7wdQCSfQBTtLP3A6
-l80DtrqYjQIB6GoRxIXVX5O9fU+uY543avgFWBrREhmjxVgjLW/hZQD6OzCBS+w9
-m/4cihVI/qJ/389inT3PC2XZFo5nPWg3ZGY1izuW3DLlWcawoZV51hL57TW1zAlr
-9wIDAQAB
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAwI+8U2lwimn77Sdf2V6w
+jKrsw6493EzGE3UXpJwhUyIG6XbQwDGGvs/0NcYkllwrDASUGszKG8tohJE9y4cT
+BuyZjju3tVqO2ZYD3GlXLfNkepSE6LatCfh8w+yYP5AGhBObt3sXkp5ygwBIF64R
+UefBgwGs4VdsP3Un7QoBN1ZfvqXVZRvHp+sqHhUwrbG+xRMZpWyvkC30/KX17eKD
+e2QmzifRxj9sVRp6SJp0jhLr/xqcIN2OhFzazBBGELPoRpNdtNpAOiqeabDdd74/
+4R0TnCr18qrXw7TsAdNCY0nfWmRMhBCe6kdmm0JaiqOQ+9/s5PvEaWsLdQD8SHAf
+vwIDAQAB
 -----END PUBLIC KEY-----
 
-I0917 14:11:35.699118 1359145 attestaion_server.go:632]      PCR: 0, verified: true value: a0b5ff3383a1116bd7dc6df177c0c2d433b9ee1813ea958fa5d166a202cb2a85
-I0917 14:11:35.699156 1359145 attestaion_server.go:632]      PCR: 1, verified: true value: e50edb964f66a7417954b1506f78a49d62062228ce84ee0b4e7e3b0e19b64a69
-I0917 14:11:35.699167 1359145 attestaion_server.go:632]      PCR: 2, verified: true value: 3d458cfe55cc03ea1f443f1562beec8df51c75e14a9fcf9a7234a13f198e7969
-I0917 14:11:35.699176 1359145 attestaion_server.go:632]      PCR: 3, verified: true value: 3d458cfe55cc03ea1f443f1562beec8df51c75e14a9fcf9a7234a13f198e7969
-I0917 14:11:35.699185 1359145 attestaion_server.go:632]      PCR: 4, verified: true value: a3358453a5148b4e3f4b96b006ae1761a2ce4aea75f6a13e10eb3e0903dfd6e2
-I0917 14:11:35.699193 1359145 attestaion_server.go:632]      PCR: 5, verified: true value: 098a2ae2d1aabed3e346b9fef96ec64056ea4043514672243bbf40b7d0972302
-I0917 14:11:35.699201 1359145 attestaion_server.go:632]      PCR: 6, verified: true value: 3d458cfe55cc03ea1f443f1562beec8df51c75e14a9fcf9a7234a13f198e7969
-I0917 14:11:35.699211 1359145 attestaion_server.go:632]      PCR: 7, verified: true value: 0a3f60cea411388b09eac782999f5e62246ab5469f9047eb508aa22c4dcd2237
-I0917 14:11:35.699219 1359145 attestaion_server.go:632]      PCR: 8, verified: true value: a775d521739876ecde2c17d0e856c584ec513e8758d9199a3d5c735836ba0ebe
-I0917 14:11:35.699232 1359145 attestaion_server.go:632]      PCR: 9, verified: true value: 4a7254a1740444f04ec61cf3f8eb8ffb5dae2069b44ad900e894b34a07626b36
-I0917 14:11:35.699241 1359145 attestaion_server.go:632]      PCR: 10, verified: true value: 0000000000000000000000000000000000000000000000000000000000000000
-I0917 14:11:35.699251 1359145 attestaion_server.go:632]      PCR: 11, verified: true value: 0000000000000000000000000000000000000000000000000000000000000000
-I0917 14:11:35.699262 1359145 attestaion_server.go:632]      PCR: 12, verified: true value: 0000000000000000000000000000000000000000000000000000000000000000
-I0917 14:11:35.699273 1359145 attestaion_server.go:632]      PCR: 13, verified: true value: 0000000000000000000000000000000000000000000000000000000000000000
-I0917 14:11:35.699282 1359145 attestaion_server.go:632]      PCR: 14, verified: true value: 306f9d8b94f17d93dc6e7cf8f5c79d652eb4c6c4d13de2dddc24af416e13ecaf
-I0917 14:11:35.699292 1359145 attestaion_server.go:632]      PCR: 15, verified: true value: 0000000000000000000000000000000000000000000000000000000000000000
-I0917 14:11:35.699301 1359145 attestaion_server.go:632]      PCR: 16, verified: true value: 0000000000000000000000000000000000000000000000000000000000000000
-I0917 14:11:35.699311 1359145 attestaion_server.go:632]      PCR: 17, verified: true value: ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
-I0917 14:11:35.699320 1359145 attestaion_server.go:632]      PCR: 18, verified: true value: ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
-I0917 14:11:35.699332 1359145 attestaion_server.go:632]      PCR: 19, verified: true value: ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
-I0917 14:11:35.699340 1359145 attestaion_server.go:632]      PCR: 20, verified: true value: ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
-I0917 14:11:35.699347 1359145 attestaion_server.go:632]      PCR: 21, verified: true value: ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
-I0917 14:11:35.699354 1359145 attestaion_server.go:632]      PCR: 22, verified: true value: ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
-I0917 14:11:35.699362 1359145 attestaion_server.go:632]      PCR: 23, verified: true value: 0000000000000000000000000000000000000000000000000000000000000000
-I0917 14:11:35.699369 1359145 attestaion_server.go:644]      quotes verified
-I0917 14:11:35.700680 1359145 attestaion_server.go:673]      secureBoot State enabled: [true]
-I0917 14:11:35.701224 1359145 attestaion_server.go:735] >>>>>>>>  DeviceSerial Number [c17933d176922964]
-I0917 14:11:35.701267 1359145 attestaion_server.go:737]       verify quote, PCRs and secureBootState
-I0917 14:11:35.702516 1359145 attestaion_server.go:893] Issued AK Certificate: 
+I0918 13:35:57.047309 1945701 attestaion_server.go:632]      PCR: 0, verified: true value: a0b5ff3383a1116bd7dc6df177c0c2d433b9ee1813ea958fa5d166a202cb2a85
+I0918 13:35:57.047335 1945701 attestaion_server.go:632]      PCR: 1, verified: true value: e50edb964f66a7417954b1506f78a49d62062228ce84ee0b4e7e3b0e19b64a69
+I0918 13:35:57.047349 1945701 attestaion_server.go:632]      PCR: 2, verified: true value: 3d458cfe55cc03ea1f443f1562beec8df51c75e14a9fcf9a7234a13f198e7969
+I0918 13:35:57.047358 1945701 attestaion_server.go:632]      PCR: 3, verified: true value: 3d458cfe55cc03ea1f443f1562beec8df51c75e14a9fcf9a7234a13f198e7969
+I0918 13:35:57.047364 1945701 attestaion_server.go:632]      PCR: 4, verified: true value: a3358453a5148b4e3f4b96b006ae1761a2ce4aea75f6a13e10eb3e0903dfd6e2
+I0918 13:35:57.047369 1945701 attestaion_server.go:632]      PCR: 5, verified: true value: 098a2ae2d1aabed3e346b9fef96ec64056ea4043514672243bbf40b7d0972302
+I0918 13:35:57.047375 1945701 attestaion_server.go:632]      PCR: 6, verified: true value: 3d458cfe55cc03ea1f443f1562beec8df51c75e14a9fcf9a7234a13f198e7969
+I0918 13:35:57.047381 1945701 attestaion_server.go:632]      PCR: 7, verified: true value: 0a3f60cea411388b09eac782999f5e62246ab5469f9047eb508aa22c4dcd2237
+I0918 13:35:57.047386 1945701 attestaion_server.go:632]      PCR: 8, verified: true value: a775d521739876ecde2c17d0e856c584ec513e8758d9199a3d5c735836ba0ebe
+I0918 13:35:57.047391 1945701 attestaion_server.go:632]      PCR: 9, verified: true value: 4a7254a1740444f04ec61cf3f8eb8ffb5dae2069b44ad900e894b34a07626b36
+I0918 13:35:57.047397 1945701 attestaion_server.go:632]      PCR: 10, verified: true value: 0000000000000000000000000000000000000000000000000000000000000000
+I0918 13:35:57.047402 1945701 attestaion_server.go:632]      PCR: 11, verified: true value: 0000000000000000000000000000000000000000000000000000000000000000
+I0918 13:35:57.047407 1945701 attestaion_server.go:632]      PCR: 12, verified: true value: 0000000000000000000000000000000000000000000000000000000000000000
+I0918 13:35:57.047417 1945701 attestaion_server.go:632]      PCR: 13, verified: true value: 0000000000000000000000000000000000000000000000000000000000000000
+I0918 13:35:57.047424 1945701 attestaion_server.go:632]      PCR: 14, verified: true value: 306f9d8b94f17d93dc6e7cf8f5c79d652eb4c6c4d13de2dddc24af416e13ecaf
+I0918 13:35:57.047431 1945701 attestaion_server.go:632]      PCR: 15, verified: true value: 0000000000000000000000000000000000000000000000000000000000000000
+I0918 13:35:57.047438 1945701 attestaion_server.go:632]      PCR: 16, verified: true value: 0000000000000000000000000000000000000000000000000000000000000000
+I0918 13:35:57.047443 1945701 attestaion_server.go:632]      PCR: 17, verified: true value: ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+I0918 13:35:57.047450 1945701 attestaion_server.go:632]      PCR: 18, verified: true value: ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+I0918 13:35:57.047455 1945701 attestaion_server.go:632]      PCR: 19, verified: true value: ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+I0918 13:35:57.047461 1945701 attestaion_server.go:632]      PCR: 20, verified: true value: ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+I0918 13:35:57.047467 1945701 attestaion_server.go:632]      PCR: 21, verified: true value: ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+I0918 13:35:57.047473 1945701 attestaion_server.go:632]      PCR: 22, verified: true value: ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+I0918 13:35:57.047480 1945701 attestaion_server.go:632]      PCR: 23, verified: true value: 0000000000000000000000000000000000000000000000000000000000000000
+I0918 13:35:57.047486 1945701 attestaion_server.go:644]      quotes verified
+I0918 13:35:57.048574 1945701 attestaion_server.go:673]      secureBoot State enabled: [true]
+I0918 13:35:57.049007 1945701 attestaion_server.go:735] >>>>>>>>  DeviceSerial Number [ee074a918b0c6346]
+I0918 13:35:57.049039 1945701 attestaion_server.go:737]       verify quote, PCRs and secureBootState
+I0918 13:35:57.049941 1945701 attestaion_server.go:893] Issued AK Certificate: 
 -----BEGIN CERTIFICATE-----
-MIIDXTCCAwOgAwIBAgIFAMDYOUgwCgYIKoZIzj0EAwIwWzELMAkGA1UEBhMCVVMx
-DzANBgNVBAoMBkdvb2dsZTEdMBsGA1UECwwUQXR0ZXN0YXRpb24gVmVyaWZpZXIx
-HDAaBgNVBAMME0F0dGVzdGF0aW9uIFJvb3QgQ0EwHhcNMjYwOTE3MTgxMTM1WhcN
-MjcwOTE3MTgxMTM1WjAAMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA
-oN+ertupPI7VXMLkCg6HiFnfi0onrr7y2Jh7FFQZNjVCH7s73t3EW2ONycfoarha
-X4Ml2M8LEPfle1POg0eV9LJe2hEPvggECikfqF0VCrcWV26FgZYzpsNHdgL8N1dm
-neaT5iG4qDAIghp2TNwUxyz9wkbUrc1asoag4IwteFAiMVC2XM85satoSTt2aX0B
-IXRT7wdQCSfQBTtLP3A6l80DtrqYjQIB6GoRxIXVX5O9fU+uY543avgFWBrREhmj
-xVgjLW/hZQD6OzCBS+w9m/4cihVI/qJ/389inT3PC2XZFo5nPWg3ZGY1izuW3DLl
-WcawoZV51hL57TW1zAlr9wIDAQABo4IBQjCCAT4wDgYDVR0PAQH/BAQDAgeAMBAG
-A1UdJQQJMAcGBWeBBQgDMAwGA1UdEwEB/wQCMAAwHwYDVR0jBBgwFoAUUA0oLf1M
-FqjzMvQhFZys3Xnv4jkwJwYDVR0gBCAwHjAIBgZngQULAQEwCAYGZ4EFCwECMAgG
-BmeBBQsBAzCBwQYDVR0RBIG5MIG2oEwGCCsGAQUFBwgEoEAwPgYFZ4EFAQKENTAw
-MDAxMDE0OjJmNmQ1MWRiNzczNmVjYjkyZGNkZTIyNzgwMzFjOGIxZWNjMzg3YjQ6
-NGQ1oCAGCCsGAQUFBwgDoBQwEgwQYzE3OTMzZDE3NjkyMjk2NKREMEIxFjAUBgVn
-gQUCARMLaWQ6MDAwMDEwMTQxEDAOBgVngQUCAhMFc3d0cG0xFjAUBgVngQUCAxML
-aWQ6MjAyNDAxMjUwCgYIKoZIzj0EAwIDSAAwRQIhAP/yN+V/EvNdYuRv3Yf6DvI7
-H5Ox5Qkb/A59hpq4q+H/AiBEVtqbgNwblkEdkx9RBTw8qu3iloExZBXfFLFAjCvM
-eQ==
+MIIDXDCCAwKgAwIBAgIEIr2CBDAKBggqhkjOPQQDAjBbMQswCQYDVQQGEwJVUzEP
+MA0GA1UECgwGR29vZ2xlMR0wGwYDVQQLDBRBdHRlc3RhdGlvbiBWZXJpZmllcjEc
+MBoGA1UEAwwTQXR0ZXN0YXRpb24gUm9vdCBDQTAeFw0yNjA5MTgxNzM1NTdaFw0y
+NzA5MTgxNzM1NTdaMAAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDA
+j7xTaXCKafvtJ1/ZXrCMquzDrj3cTMYTdReknCFTIgbpdtDAMYa+z/Q1xiSWXCsM
+BJQazMoby2iEkT3LhxMG7JmOO7e1Wo7ZlgPcaVct82R6lITotq0J+HzD7Jg/kAaE
+E5u3exeSnnKDAEgXrhFR58GDAazhV2w/dSftCgE3Vl++pdVlG8en6yoeFTCtsb7F
+ExmlbK+QLfT8pfXt4oN7ZCbOJ9HGP2xVGnpImnSOEuv/Gpwg3Y6EXNrMEEYQs+hG
+k1202kA6Kp5psN13vj/hHROcKvXyqtfDtOwB00JjSd9aZEyEEJ7qR2abQlqKo5D7
+3+zk+8Rpawt1APxIcB+/AgMBAAGjggFCMIIBPjAOBgNVHQ8BAf8EBAMCB4AwEAYD
+VR0lBAkwBwYFZ4EFCAMwDAYDVR0TAQH/BAIwADAfBgNVHSMEGDAWgBRQDSgt/UwW
+qPMy9CEVnKzdee/iOTAnBgNVHSAEIDAeMAgGBmeBBQsBATAIBgZngQULAQIwCAYG
+Z4EFCwEDMIHBBgNVHREEgbkwgbagTAYIKwYBBQUHCASgQDA+BgVngQUBAoQ1MDAw
+MDEwMTQ6MmY2ZDUxZGI3NzM2ZWNiOTJkY2RlMjI3ODAzMWM4YjFlY2MzODdiNDo0
+ZDWgIAYIKwYBBQUHCAOgFDASDBBlZTA3NGE5MThiMGM2MzQ2pEQwQjEWMBQGBWeB
+BQIBEwtpZDowMDAwMTAxNDEQMA4GBWeBBQICEwVzd3RwbTEWMBQGBWeBBQIDEwtp
+ZDoyMDI0MDEyNTAKBggqhkjOPQQDAgNIADBFAiEAtN4Am5JtRx7W4LlMhV/ZjNAW
+D50xMk2j25aZFxnLO3sCIGK6tg63zyjv2PZEnZPfMCfRGCWeRrY/6W3eiUVIVNlA
 -----END CERTIFICATE-----
 
 Certificate:
     Data:
         Version: 3 (0x2)
-        Serial Number: 3235395912 (0xc0d83948)
+        Serial Number: 582844932 (0x22bd8204)
         Signature Algorithm: ECDSA-SHA256
         Issuer: C=US,O=Google,OU=Attestation Verifier,CN=Attestation Root CA
         Validity
-            Not Before: Sep 17 18:11:35 2026 UTC
-            Not After : Sep 17 18:11:35 2027 UTC
+            Not Before: Sep 18 17:35:57 2026 UTC
+            Not After : Sep 18 17:35:57 2027 UTC
         Subject:
         Subject Public Key Info:
             Public Key Algorithm: RSA
                 Public-Key: (2048 bit)
                 Modulus:
-                    a0:df:9e:ae:db:a9:3c:8e:d5:5c:c2:e4:0a:0e:87:
-                    88:59:df:8b:4a:27:ae:be:f2:d8:98:7b:14:54:19:
-                    36:35:42:1f:bb:3b:de:dd:c4:5b:63:8d:c9:c7:e8:
-                    6a:b8:5a:5f:83:25:d8:cf:0b:10:f7:e5:7b:53:ce:
-                    83:47:95:f4:b2:5e:da:11:0f:be:08:04:0a:29:1f:
-                    a8:5d:15:0a:b7:16:57:6e:85:81:96:33:a6:c3:47:
-                    76:02:fc:37:57:66:9d:e6:93:e6:21:b8:a8:30:08:
-                    82:1a:76:4c:dc:14:c7:2c:fd:c2:46:d4:ad:cd:5a:
-                    b2:86:a0:e0:8c:2d:78:50:22:31:50:b6:5c:cf:39:
-                    b1:ab:68:49:3b:76:69:7d:01:21:74:53:ef:07:50:
-                    09:27:d0:05:3b:4b:3f:70:3a:97:cd:03:b6:ba:98:
-                    8d:02:01:e8:6a:11:c4:85:d5:5f:93:bd:7d:4f:ae:
-                    63:9e:37:6a:f8:05:58:1a:d1:12:19:a3:c5:58:23:
-                    2d:6f:e1:65:00:fa:3b:30:81:4b:ec:3d:9b:fe:1c:
-                    8a:15:48:fe:a2:7f:df:cf:62:9d:3d:cf:0b:65:d9:
-                    16:8e:67:3d:68:37:64:66:35:8b:3b:96:dc:32:e5:
-                    59:c6:b0:a1:95:79:d6:12:f9:ed:35:b5:cc:09:6b:
-                    f7
+                    c0:8f:bc:53:69:70:8a:69:fb:ed:27:5f:d9:5e:b0:
+                    8c:aa:ec:c3:ae:3d:dc:4c:c6:13:75:17:a4:9c:21:
+                    53:22:06:e9:76:d0:c0:31:86:be:cf:f4:35:c6:24:
+                    96:5c:2b:0c:04:94:1a:cc:ca:1b:cb:68:84:91:3d:
+                    cb:87:13:06:ec:99:8e:3b:b7:b5:5a:8e:d9:96:03:
+                    dc:69:57:2d:f3:64:7a:94:84:e8:b6:ad:09:f8:7c:
+                    c3:ec:98:3f:90:06:84:13:9b:b7:7b:17:92:9e:72:
+                    83:00:48:17:ae:11:51:e7:c1:83:01:ac:e1:57:6c:
+                    3f:75:27:ed:0a:01:37:56:5f:be:a5:d5:65:1b:c7:
+                    a7:eb:2a:1e:15:30:ad:b1:be:c5:13:19:a5:6c:af:
+                    90:2d:f4:fc:a5:f5:ed:e2:83:7b:64:26:ce:27:d1:
+                    c6:3f:6c:55:1a:7a:48:9a:74:8e:12:eb:ff:1a:9c:
+                    20:dd:8e:84:5c:da:cc:10:46:10:b3:e8:46:93:5d:
+                    b4:da:40:3a:2a:9e:69:b0:dd:77:be:3f:e1:1d:13:
+                    9c:2a:f5:f2:aa:d7:c3:b4:ec:01:d3:42:63:49:df:
+                    5a:64:4c:84:10:9e:ea:47:66:9b:42:5a:8a:a3:90:
+                    fb:df:ec:e4:fb:c4:69:6b:0b:75:00:fc:48:70:1f:
+                    bf
                 Exponent: 65537 (0x10001)
         X509v3 extensions:
             X509v3 Key Usage: critical
@@ -708,20 +711,20 @@ Certificate:
                 Policy: 2.23.133.11.1.3
             X509v3 Subject Alternative Name:
                 Hardware Module Name: Type: 2.23.133.1.2, Serial Number: 00001014:2f6d51db7736ecb92dcde2278031c8b1ecc387b4:4d5
-                Permanent Identifier: c17933d176922964
+                Permanent Identifier: ee074a918b0c6346
                 TPM Manufacturer: id:00001014
                 TPM Model: swtpm
                 TPM Version: id:20240125
     Signature Algorithm: ECDSA-SHA256
-         30:45:02:21:00:ff:f2:37:e5:7f:12:f3:5d:62:e4:6f:dd:87:
-         fa:0e:f2:3b:1f:93:b1:e5:09:1b:fc:0e:7d:86:9a:b8:ab:e1:
-         ff:02:20:44:56:da:9b:80:dc:1b:96:41:1d:93:1f:51:05:3c:
-         3c:aa:ed:e2:96:81:31:64:15:df:14:b1:40:8c:2b:cc:79
+         30:45:02:21:00:b4:de:00:9b:92:6d:47:1e:d6:e0:b9:4c:85:
+         5f:d9:8c:d0:16:0f:9d:31:32:4d:a3:db:96:99:17:19:cb:3b:
+         7b:02:20:62:ba:b6:0e:b7:cf:28:ef:d8:f6:44:9d:93:df:30:
+         27:d1:18:25:9e:46:b6:3f:e9:6d:de:89:45:48:54:d9:40
 
-I0917 14:11:35.702645 1359145 attestaion_server.go:899] =============== Attestation x509 Sent ===============
+I0918 13:35:57.050027 1945701 attestaion_server.go:899] =============== Attestation x509 Sent ===============
 ```
 
-Note the server generates and sets the permanent-identfier (`DeviceSerial Number [c17933d176922964]`) which gets encoded into the AK and eventually the issued x509
+Note the server generates and sets the permanent-identfier (`DeviceSerial Number [ee074a918b0c6346]`) which gets encoded into the AK and eventually the issued x509
 
 The step-ca logs also chronicles the provisioning flows
 
@@ -730,15 +733,15 @@ The step-ca logs also chronicles the provisioning flows
 ```bash
 $ step-ca
 
-INFO[0063]                                               duration="374.308µs" duration-ns=374308 fields.time="2026-09-17T14:11:35-04:00" method=GET name=ca path=/acme/acme-da/directory protocol=HTTP/1.1 referer= remote-address=127.0.0.1 request-id=1d09ff5d-fe88-494e-aced-0a26f4b373a8 response="{\"newNonce\":\"https://ca.domain.com:8443/acme/acme-da/new-nonce\",\"newAccount\":\"https://ca.domain.com:8443/acme/acme-da/new-account\",\"newOrder\":\"https://ca.domain.com:8443/acme/acme-da/new-order\",\"revokeCert\":\"https://ca.domain.com:8443/acme/acme-da/revoke-cert\",\"keyChange\":\"https://ca.domain.com:8443/acme/acme-da/key-change\"}" size=327 status=200 user-agent=golang.org/x/crypto/acme@v0.50.0 user-id=
-INFO[0063]                                               duration=8.9186ms duration-ns=8918600 fields.time="2026-09-17T14:11:35-04:00" method=HEAD name=ca nonce=bzY2a0F4UWJTUW9yMVVNM21TTWpQbjBGenI4d3lnOGk path=/acme/acme-da/new-nonce protocol=HTTP/1.1 referer= remote-address=127.0.0.1 request-id=3b9ef684-5669-44ba-b8c3-8d962a660344 size=0 status=200 user-agent=golang.org/x/crypto/acme@v0.50.0 user-id=
-INFO[0063]                                               duration=6.308908ms duration-ns=6308908 fields.time="2026-09-17T14:11:35-04:00" method=POST name=ca nonce=ck5JM0hJQlU5UGJSZ1V1aXBHbXRKNkszN29KcFFSaWk path=/acme/acme-da/new-account protocol=HTTP/1.1 referer= remote-address=127.0.0.1 request-id=6f7c29d8-2880-4c41-a8a4-3d3616148fd9 response="{\"contact\":[\"mailto:admin@example.local\"],\"status\":\"valid\",\"orders\":\"https://ca.domain.com:8443/acme/acme-da/account/aPRFJWLQZTuE5V6aArjhTliMKD3CB18f/orders\"}" size=159 status=201 user-agent=golang.org/x/crypto/acme@v0.50.0 user-id=
-INFO[0063]                                               duration=10.36764ms duration-ns=10367640 fields.time="2026-09-17T14:11:35-04:00" method=POST name=ca nonce=U0NqdXgyd1dNdmpSTGtTU3lDU3d0Q0J5dWRtNnVjR3Q path=/acme/acme-da/new-order protocol=HTTP/1.1 referer= remote-address=127.0.0.1 request-id=acb1449a-5540-4433-931b-c4d01ba172e2 response="{\"id\":\"MVuKEeQUEoEdBKQ4OsUu7YYq0kilZEv8\",\"status\":\"pending\",\"expires\":\"2026-09-18T18:11:35Z\",\"identifiers\":[{\"type\":\"permanent-identifier\",\"value\":\"c17933d176922964\"}],\"notBefore\":\"2026-09-17T18:10:35Z\",\"notAfter\":\"2026-09-18T18:11:35Z\",\"authorizations\":[\"https://ca.domain.com:8443/acme/acme-da/authz/HHFZRcvLgMTNBiHRWgObuGEp72j5X1GD\"],\"finalize\":\"https://ca.domain.com:8443/acme/acme-da/order/MVuKEeQUEoEdBKQ4OsUu7YYq0kilZEv8/finalize\"}" size=439 status=201 user-agent=golang.org/x/crypto/acme@v0.50.0 user-id=
-INFO[0063]                                               duration=4.300021ms duration-ns=4300021 fields.time="2026-09-17T14:11:35-04:00" method=POST name=ca nonce=Vk9ER3FpRjV0T01vM3hvdFlBYVpydW94WHF6V1NwR3c path=/acme/acme-da/authz/HHFZRcvLgMTNBiHRWgObuGEp72j5X1GD protocol=HTTP/1.1 referer= remote-address=127.0.0.1 request-id=37589c65-9e53-49ac-9cf8-aef30b8be573 response="{\"identifier\":{\"type\":\"permanent-identifier\",\"value\":\"c17933d176922964\"},\"status\":\"pending\",\"challenges\":[{\"type\":\"device-attest-01\",\"status\":\"pending\",\"token\":\"Zj81KIuk2YxowWclagoqCf3mC3sO9Uyz\",\"url\":\"https://ca.domain.com:8443/acme/acme-da/challenge/HHFZRcvLgMTNBiHRWgObuGEp72j5X1GD/eGVHvNRyCgHZn6PlcDSr2mIE09RvZzt5\"}],\"wildcard\":false,\"expires\":\"2026-09-18T18:11:35Z\"}" size=372 status=200 user-agent=golang.org/x/crypto/acme@v0.50.0 user-id=
-INFO[0066]                                               duration=15.693747ms duration-ns=15693747 fields.time="2026-09-17T14:11:38-04:00" method=POST name=ca nonce=Zm5tQ3lhb3NFVDJjVVJIRmFaWjFaWVhVc3o1NlJraTc path=/acme/acme-da/challenge/HHFZRcvLgMTNBiHRWgObuGEp72j5X1GD/eGVHvNRyCgHZn6PlcDSr2mIE09RvZzt5 protocol=HTTP/1.1 referer= remote-address=127.0.0.1 request-id=67e33b4a-abda-47ac-b98a-ac7e6b1b0a26 response="{\"type\":\"device-attest-01\",\"status\":\"valid\",\"token\":\"Zj81KIuk2YxowWclagoqCf3mC3sO9Uyz\",\"validated\":\"2026-09-17T18:11:38Z\",\"url\":\"https://ca.domain.com:8443/acme/acme-da/challenge/HHFZRcvLgMTNBiHRWgObuGEp72j5X1GD/eGVHvNRyCgHZn6PlcDSr2mIE09RvZzt5\"}" size=247 status=200 user-agent=golang.org/x/crypto/acme@v0.50.0 user-id=
-INFO[0066]                                               duration=8.201372ms duration-ns=8201372 fields.time="2026-09-17T14:11:38-04:00" method=POST name=ca nonce=ejRtaGs4Q0Rpb0QxYmtldEM3NGdSOEZoTkxPeEJwRFk path=/acme/acme-da/order/MVuKEeQUEoEdBKQ4OsUu7YYq0kilZEv8 protocol=HTTP/1.1 referer= remote-address=127.0.0.1 request-id=82d53570-6117-4637-8810-1552f9fa03af response="{\"id\":\"MVuKEeQUEoEdBKQ4OsUu7YYq0kilZEv8\",\"status\":\"ready\",\"expires\":\"2026-09-18T18:11:35Z\",\"identifiers\":[{\"type\":\"permanent-identifier\",\"value\":\"c17933d176922964\"}],\"notBefore\":\"2026-09-17T18:10:35Z\",\"notAfter\":\"2026-09-18T18:11:35Z\",\"authorizations\":[\"https://ca.domain.com:8443/acme/acme-da/authz/HHFZRcvLgMTNBiHRWgObuGEp72j5X1GD\"],\"finalize\":\"https://ca.domain.com:8443/acme/acme-da/order/MVuKEeQUEoEdBKQ4OsUu7YYq0kilZEv8/finalize\"}" size=437 status=200 user-agent=golang.org/x/crypto/acme@v0.50.0 user-id=
-INFO[0066]                                               duration=12.662188ms duration-ns=12662188 fields.time="2026-09-17T14:11:38-04:00" method=POST name=ca nonce=ZUdPNzByOG1xeVVLcURYNFB0UnBYRzF3d1NiOGVhZnY path=/acme/acme-da/order/MVuKEeQUEoEdBKQ4OsUu7YYq0kilZEv8/finalize protocol=HTTP/1.1 referer= remote-address=127.0.0.1 request-id=bfaed9d9-1a70-4ba9-ac22-9fc18de58be6 response="{\"id\":\"MVuKEeQUEoEdBKQ4OsUu7YYq0kilZEv8\",\"status\":\"valid\",\"expires\":\"2026-09-18T18:11:35Z\",\"identifiers\":[{\"type\":\"permanent-identifier\",\"value\":\"c17933d176922964\"}],\"notBefore\":\"2026-09-17T18:10:35Z\",\"notAfter\":\"2026-09-18T18:11:35Z\",\"authorizations\":[\"https://ca.domain.com:8443/acme/acme-da/authz/HHFZRcvLgMTNBiHRWgObuGEp72j5X1GD\"],\"finalize\":\"https://ca.domain.com:8443/acme/acme-da/order/MVuKEeQUEoEdBKQ4OsUu7YYq0kilZEv8/finalize\",\"certificate\":\"https://ca.domain.com:8443/acme/acme-da/certificate/IFNYEvbR7WHjUhY0ffzMJBkADHtx37lG\"}" size=538 status=200 user-agent=golang.org/x/crypto/acme@v0.50.0 user-id=
-INFO[0066]                                               certificate="MIICDjCCAbWgAwIBAgIQGUh1qZAh3uHMl1G60ws+szAKBggqhkjOPQQDAjA+MRUwEwYDVQQKEwxtVExTIEFDTUUgQ0ExJTAjBgNVBAMTHG1UTFMgQUNNRSBDQSBJbnRlcm1lZGlhdGUgQ0EwHhcNMjYwOTE3MTgxMDM1WhcNMjYwOTE4MTgxMTM1WjAbMRkwFwYDVQQDExBjMTc5MzNkMTc2OTIyOTY0MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEUc2gOVkQ7Nrb8R/0ZRZGft5ZSlakRf47mRu9ze8ezHo7iJWP7cQPQFdzqEHyJJO2g+PwXujlnIhINXHbs/lX8qOBtzCBtDAOBgNVHQ8BAf8EBAMCB4AwEwYDVR0lBAwwCgYIKwYBBQUHAwIwHQYDVR0OBBYEFFrR2dgaif4M7vgq8K82QO9TMbtzMB8GA1UdIwQYMBaAFCkRWgNKyEIYtAM5iCUQZ+3jKH7nMCsGA1UdEQQkMCKgIAYIKwYBBQUHCAOgFDASDBBjMTc5MzNkMTc2OTIyOTY0MCAGDCsGAQQBgqRkxihAAQQQMA4CAQYEB2FjbWUtZGEEADAKBggqhkjOPQQDAgNHADBEAiA6/u3R6n0HytHRLqckq3Y2H1pqiwOa7G+M7zDOgWKgzQIgC+DF3hNutbdhgmaTPJI00zsnc2xp17bX2Wvh6igZfz0=" duration=4.091549ms duration-ns=4091549 fields.time="2026-09-17T14:11:38-04:00" issuer="mTLS ACME CA Intermediate CA" method=POST name=ca nonce=UERxNHBOeFp5S29hank0UFA5WWFVY3Z4eENLT3EyclI path=/acme/acme-da/certificate/IFNYEvbR7WHjUhY0ffzMJBkADHtx37lG protocol=HTTP/1.1 provisioner=acme-da public-key="ECDSA P-256" referer= remote-address=127.0.0.1 request-id=889a5dc4-b368-412e-9b42-d7bc235201be sans="map[]" serial=33606931744527285064901955453127966387 size=1474 status=200 subject=c17933d176922964 user-agent=golang.org/x/crypto/acme@v0.50.0 user-id= valid-from="2026-09-17T18:10:35Z" valid-to="2026-09-18T18:11:35Z"
+INFO[0251]                                               duration="94.433µs" duration-ns=94433 fields.time="2026-09-18T13:35:57-04:00" method=GET name=ca path=/acme/acme-da/directory protocol=HTTP/1.1 referer= remote-address=127.0.0.1 request-id=9cb8b301-8f9c-473a-b2d4-be867dcd44e9 response="{\"newNonce\":\"https://ca.domain.com:8443/acme/acme-da/new-nonce\",\"newAccount\":\"https://ca.domain.com:8443/acme/acme-da/new-account\",\"newOrder\":\"https://ca.domain.com:8443/acme/acme-da/new-order\",\"revokeCert\":\"https://ca.domain.com:8443/acme/acme-da/revoke-cert\",\"keyChange\":\"https://ca.domain.com:8443/acme/acme-da/key-change\"}" size=327 status=200 user-agent=golang.org/x/crypto/acme@v0.50.0 user-id=
+INFO[0251]                                               duration=7.890495ms duration-ns=7890495 fields.time="2026-09-18T13:35:57-04:00" method=HEAD name=ca nonce=bjV2N21EWFVmajBKajV3Vlk4NXVrRG96bDVaUGZBQ2s path=/acme/acme-da/new-nonce protocol=HTTP/1.1 referer= remote-address=127.0.0.1 request-id=ae9a9d6a-afbf-447f-a08c-27a0e343da15 size=0 status=200 user-agent=golang.org/x/crypto/acme@v0.50.0 user-id=
+INFO[0251]                                               duration=7.945577ms duration-ns=7945577 fields.time="2026-09-18T13:35:57-04:00" method=POST name=ca nonce=REZOWVR6Tk0xU2M5QmlNMmtVWW8yTHlpSFBRMXJ4bGo path=/acme/acme-da/new-account protocol=HTTP/1.1 referer= remote-address=127.0.0.1 request-id=9f91db94-fd39-4cf7-8aca-8a81f09da8a1 response="{\"contact\":[\"mailto:admin@example.local\"],\"status\":\"valid\",\"orders\":\"https://ca.domain.com:8443/acme/acme-da/account/VR3qH0z3dAIZuof9ud2cbUIUgq4qUGOh/orders\"}" size=159 status=201 user-agent=golang.org/x/crypto/acme@v0.50.0 user-id=
+INFO[0251]                                               duration=7.524387ms duration-ns=7524387 fields.time="2026-09-18T13:35:57-04:00" method=POST name=ca nonce=UG5RNXlPZmJGNXNWTG54dVdiUUlDSGFoOU9od3p5Zng path=/acme/acme-da/new-order protocol=HTTP/1.1 referer= remote-address=127.0.0.1 request-id=a525131a-eb79-4877-a83b-4e2b3db262d9 response="{\"id\":\"LXP21xDVOtxVbK55eDLi3PN2bIPSICZO\",\"status\":\"pending\",\"expires\":\"2026-09-19T17:35:57Z\",\"identifiers\":[{\"type\":\"permanent-identifier\",\"value\":\"ee074a918b0c6346\"}],\"notBefore\":\"2026-09-18T17:34:57Z\",\"notAfter\":\"2026-09-19T17:35:57Z\",\"authorizations\":[\"https://ca.domain.com:8443/acme/acme-da/authz/yiL3kYdiEgW2PQhqATczcFK0F4P8SQ1L\"],\"finalize\":\"https://ca.domain.com:8443/acme/acme-da/order/LXP21xDVOtxVbK55eDLi3PN2bIPSICZO/finalize\"}" size=439 status=201 user-agent=golang.org/x/crypto/acme@v0.50.0 user-id=
+INFO[0251]                                               duration=3.559074ms duration-ns=3559074 fields.time="2026-09-18T13:35:57-04:00" method=POST name=ca nonce=MmtZWERmSk1DeE1rUWMzU1lFa0lRMzN0RFRWcnJyZVU path=/acme/acme-da/authz/yiL3kYdiEgW2PQhqATczcFK0F4P8SQ1L protocol=HTTP/1.1 referer= remote-address=127.0.0.1 request-id=389a39fb-569f-483c-bcef-39d1004f508a response="{\"identifier\":{\"type\":\"permanent-identifier\",\"value\":\"ee074a918b0c6346\"},\"status\":\"pending\",\"challenges\":[{\"type\":\"device-attest-01\",\"status\":\"pending\",\"token\":\"eBQWtPewG2kWUSXhFPqp68CvUb8W3H9o\",\"url\":\"https://ca.domain.com:8443/acme/acme-da/challenge/yiL3kYdiEgW2PQhqATczcFK0F4P8SQ1L/85vqo4BfxHPqPP262T6FULphKc0dyFsR\"}],\"wildcard\":false,\"expires\":\"2026-09-19T17:35:57Z\"}" size=372 status=200 user-agent=golang.org/x/crypto/acme@v0.50.0 user-id=
+INFO[0254]                                               duration=8.721301ms duration-ns=8721301 fields.time="2026-09-18T13:36:00-04:00" method=POST name=ca nonce=aHl4TkhqWmt3YkpSUlJWNnhyVUtYYWRJQURRMVJ0dWg path=/acme/acme-da/challenge/yiL3kYdiEgW2PQhqATczcFK0F4P8SQ1L/85vqo4BfxHPqPP262T6FULphKc0dyFsR protocol=HTTP/1.1 referer= remote-address=127.0.0.1 request-id=f2e037da-fd0b-4856-8b5a-f57e3b894473 response="{\"type\":\"device-attest-01\",\"status\":\"valid\",\"token\":\"eBQWtPewG2kWUSXhFPqp68CvUb8W3H9o\",\"validated\":\"2026-09-18T17:36:00Z\",\"url\":\"https://ca.domain.com:8443/acme/acme-da/challenge/yiL3kYdiEgW2PQhqATczcFK0F4P8SQ1L/85vqo4BfxHPqPP262T6FULphKc0dyFsR\"}" size=247 status=200 user-agent=golang.org/x/crypto/acme@v0.50.0 user-id=
+INFO[0254]                                               duration=6.500374ms duration-ns=6500374 fields.time="2026-09-18T13:36:00-04:00" method=POST name=ca nonce=TlpjdFR1Z1Z6ZUR1YUU4TmY4aGlZcVB2a2hPb1RRdTc path=/acme/acme-da/order/LXP21xDVOtxVbK55eDLi3PN2bIPSICZO protocol=HTTP/1.1 referer= remote-address=127.0.0.1 request-id=f873f855-9a29-4c6b-ae33-b9594a32ebe8 response="{\"id\":\"LXP21xDVOtxVbK55eDLi3PN2bIPSICZO\",\"status\":\"ready\",\"expires\":\"2026-09-19T17:35:57Z\",\"identifiers\":[{\"type\":\"permanent-identifier\",\"value\":\"ee074a918b0c6346\"}],\"notBefore\":\"2026-09-18T17:34:57Z\",\"notAfter\":\"2026-09-19T17:35:57Z\",\"authorizations\":[\"https://ca.domain.com:8443/acme/acme-da/authz/yiL3kYdiEgW2PQhqATczcFK0F4P8SQ1L\"],\"finalize\":\"https://ca.domain.com:8443/acme/acme-da/order/LXP21xDVOtxVbK55eDLi3PN2bIPSICZO/finalize\"}" size=437 status=200 user-agent=golang.org/x/crypto/acme@v0.50.0 user-id=
+INFO[0254]                                               duration=12.852906ms duration-ns=12852906 fields.time="2026-09-18T13:36:00-04:00" method=POST name=ca nonce=ekZjNm9BMFNycHVYYUpheVVyQUtHSmxNcFdldjZ0dTQ path=/acme/acme-da/order/LXP21xDVOtxVbK55eDLi3PN2bIPSICZO/finalize protocol=HTTP/1.1 referer= remote-address=127.0.0.1 request-id=0f04fa21-0be1-4462-942c-64a7547ecf31 response="{\"id\":\"LXP21xDVOtxVbK55eDLi3PN2bIPSICZO\",\"status\":\"valid\",\"expires\":\"2026-09-19T17:35:57Z\",\"identifiers\":[{\"type\":\"permanent-identifier\",\"value\":\"ee074a918b0c6346\"}],\"notBefore\":\"2026-09-18T17:34:57Z\",\"notAfter\":\"2026-09-19T17:35:57Z\",\"authorizations\":[\"https://ca.domain.com:8443/acme/acme-da/authz/yiL3kYdiEgW2PQhqATczcFK0F4P8SQ1L\"],\"finalize\":\"https://ca.domain.com:8443/acme/acme-da/order/LXP21xDVOtxVbK55eDLi3PN2bIPSICZO/finalize\",\"certificate\":\"https://ca.domain.com:8443/acme/acme-da/certificate/iSKLEhS0er0PADUxpQkyTt6UCZk1SRk6\"}" size=538 status=200 user-agent=golang.org/x/crypto/acme@v0.50.0 user-id=
+INFO[0254]                                               certificate="MIICEDCCAbagAwIBAgIRAIQy0DzA8teTI/XpnrC3uk8wCgYIKoZIzj0EAwIwPjEVMBMGA1UEChMMbVRMUyBBQ01FIENBMSUwIwYDVQQDExxtVExTIEFDTUUgQ0EgSW50ZXJtZWRpYXRlIENBMB4XDTI2MDkxODE3MzQ1N1oXDTI2MDkxOTE3MzU1N1owGzEZMBcGA1UEAxMQZWUwNzRhOTE4YjBjNjM0NjBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABLcm4Du45Fhaf0Kng0aIzeDjuYtRTMhOabSJcbYUfL4e0VGI+0EhjwzH7T/ynOXBqsY4Ti4bR2e8mjNdSI2GyFmjgbcwgbQwDgYDVR0PAQH/BAQDAgeAMBMGA1UdJQQMMAoGCCsGAQUFBwMCMB0GA1UdDgQWBBTvvYx4+43q2+gTwbqPFLnrYTFc3TAfBgNVHSMEGDAWgBQpEVoDSshCGLQDOYglEGft4yh+5zArBgNVHREEJDAioCAGCCsGAQUFBwgDoBQwEgwQZWUwNzRhOTE4YjBjNjM0NjAgBgwrBgEEAYKkZMYoQAEEEDAOAgEGBAdhY21lLWRhBAAwCgYIKoZIzj0EAwIDSAAwRQIgTmIa4Fu6EXkcn6j/TJwVdEdsSvnIA53LQgUBOiGo75QCIQC01PboxxaCXRg2VFK0UHg07mjPLo6cBcSxlutZzgGVFA==" duration=3.753242ms duration-ns=3753242 fields.time="2026-09-18T13:36:00-04:00" issuer="mTLS ACME CA Intermediate CA" method=POST name=ca nonce=bjNISURIZ1QyMDRhV0pwczlHeHRma0hrNGQza2cyY1Q path=/acme/acme-da/certificate/iSKLEhS0er0PADUxpQkyTt6UCZk1SRk6 protocol=HTTP/1.1 provisioner=acme-da public-key="ECDSA P-256" referer= remote-address=127.0.0.1 request-id=1c153447-1a90-4869-9cd0-8219ee98a3df sans="map[]" serial=175721933841137646965138916707233413711 size=1478 status=200 subject=ee074a918b0c6346 user-agent=golang.org/x/crypto/acme@v0.50.0 user-id= valid-from="2026-09-18T17:34:57Z" valid-to="2026-09-19T17:35:57Z"
 ```
 
 ### Testing

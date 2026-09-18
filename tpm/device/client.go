@@ -536,7 +536,7 @@ func run() int {
 			Algorithm: attest.ECDSA,
 			Size:      256,
 			Parent: &attest.ParentKeyConfig{
-				Algorithm: attest.ECDSA,
+				Algorithm: attest.RSA,
 				Handle:    tpmutil.Handle(primaryKey.ObjectHandle), //  or to use default RSA SRK 0x81000001,
 			},
 			QualifyingData: keyauthHash, // encode some client-side data into the attestatio that the server can verify
