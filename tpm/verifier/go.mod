@@ -1,4 +1,4 @@
-module verifier
+module github.com/salrashid123/device-attest-01/tpm/verifier
 
 go 1.26.2
 
