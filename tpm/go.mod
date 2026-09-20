@@ -1,4 +1,4 @@
-module main
+module github.com/salrashid123/device-attest-01/tpm
 
 go 1.26.2
 

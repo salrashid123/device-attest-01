@@ -19,12 +19,12 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Verifier_OfferEK_FullMethodName               = "/verifier.Verifier/OfferEK"
-	Verifier_OfferAK_FullMethodName               = "/verifier.Verifier/OfferAK"
-	Verifier_GetMakeCredential_FullMethodName     = "/verifier.Verifier/GetMakeCredential"
-	Verifier_SetActivateCredential_FullMethodName = "/verifier.Verifier/SetActivateCredential"
-	Verifier_OfferQuote_FullMethodName            = "/verifier.Verifier/OfferQuote"
-	Verifier_SetQuote_FullMethodName              = "/verifier.Verifier/SetQuote"
+	Verifier_OfferEK_FullMethodName               = "/Verifier/OfferEK"
+	Verifier_OfferAK_FullMethodName               = "/Verifier/OfferAK"
+	Verifier_GetMakeCredential_FullMethodName     = "/Verifier/GetMakeCredential"
+	Verifier_SetActivateCredential_FullMethodName = "/Verifier/SetActivateCredential"
+	Verifier_OfferQuote_FullMethodName            = "/Verifier/OfferQuote"
+	Verifier_SetQuote_FullMethodName              = "/Verifier/SetQuote"
 )
 
 // VerifierClient is the client API for Verifier service.
@@ -276,7 +276,7 @@ func _Verifier_SetQuote_Handler(srv interface{}, ctx context.Context, dec func(i
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var Verifier_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "verifier.Verifier",
+	ServiceName: "Verifier",
 	HandlerType: (*VerifierServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
