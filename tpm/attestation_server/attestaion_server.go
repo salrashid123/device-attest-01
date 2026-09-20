@@ -38,7 +38,7 @@ import (
 	"github.com/google/go-tpm-tools/proto/tpm"
 	tpmtoolsserver "github.com/google/go-tpm-tools/server"
 	"github.com/google/uuid"
-	"github.com/salrashid123/go_tpm_registrar/verifier"
+	"github.com/salrashid123/device-attest-01/tpm/verifier"
 	"github.com/smallstep/certinfo"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"

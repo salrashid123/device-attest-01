@@ -37,7 +37,7 @@ import (
 	"github.com/google/go-tpm/tpm2"
 	"github.com/google/go-tpm/tpm2/transport"
 	"github.com/google/go-tpm/tpmutil"
-	"github.com/salrashid123/go_tpm_registrar/verifier"
+	"github.com/salrashid123/device-attest-01/tpm/verifier"
 	"github.com/smallstep/certinfo"
 	"golang.org/x/crypto/acme"
 	"google.golang.org/grpc"
@@ -645,7 +645,20 @@ func run() int {
 		certificationAttestation := nk.CertificationParameters().CreateAttestation
 		certificationPublic := nk.CertificationParameters().Public
 
-		//  first verify the attestation using the AK Public
+		// the acme server should verify the ak is signed by the trusted attestation_server's CA
+		rootsPool := x509.NewCertPool()
+		rootsPool.AddCert(ccacrt)
+
+		_, err = akcert.Verify(x509.VerifyOptions{
+			Roots:     rootsPool,
+			KeyUsages: []x509.ExtKeyUsage{x509.ExtKeyUsage(x509.ExtKeyUsageAny)}, // todo: allow custom extensions
+		})
+		if err != nil {
+			glog.Errorf("error ak cert verification failed: %v", err)
+			return 1
+		}
+
+		//  verify the attestation using the AK Public
 		derivedSigTPMTSIGNATURE, err := tpm2.Unmarshal[tpm2.TPMTSignature](certificationSignature)
 		if err != nil {
 			glog.Errorf("error parsing TPM  derivedSigTPMTSIGNATURE structure: %v", err)
@@ -661,6 +674,7 @@ func run() int {
 		hsh := crypto.SHA256.New()
 		hsh.Write(certificationAttestation)
 
+		// now verify that the AK signed the attestation
 		err = rsa.VerifyPKCS1v15(akcert.PublicKey.(*rsa.PublicKey), crypto.SHA256, hsh.Sum(nil), signatureRSA.Sig.Buffer)
 		if err != nil {
 			glog.Errorf("Failed to get verify signature digest with ak: %v", err)

@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package verifier;
 
-option go_package = "github.com/salrashid123/go_tpm_registrar/verifier";
+option go_package = "github.com/salrashid123/device-attest-01/tpm/verifier";
 
 // protoc --go_out=. --go_opt=paths=source_relative --go-grpc_opt=require_unimplemented_servers=false  --descriptor_set_out=verifier/verifier.proto.pb --go-grpc_out=. --go-grpc_opt=paths=source_relative verifier/verifier.proto
 
